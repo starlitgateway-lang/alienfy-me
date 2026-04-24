@@ -926,41 +926,54 @@ async function startTransform() {
   startLoadingBar();
 
   try {
-    const prompt = encodeURIComponent(
-      "An alien character portrait in acrylic painting style by artist Starlit. " +
-      "Large elongated dome head, huge oversized wraparound black almond-shaped eyes with white highlight dots, " +
-      "small diamond gem shape on forehead, smooth vibrant alien skin in purple or green or pink or teal, " +
-      "wearing a colorful cosmic jumpsuit outfit, " +
-      "warm glowing cosmic background with stars and nebula, " +
-      "whimsical expressive character art, bold acrylic brushwork, " +
-      "vibrant saturated colors, full body portrait, high quality painting, no humans"
-    );
+    const REPLICATE_API_TOKEN = "YOUR_API_TOKEN_HERE";
 
-    const seed = Math.floor(Math.random() * 999999);
-    const imageUrl = `https://image.pollinations.ai/prompt/${prompt}?width=1024&height=1024&seed=${seed}&nologo=true&model=flux`;
+    const prompt = "STARLIT style alien portrait, large dome head, huge black almond eyes with white highlight dots, diamond gem on forehead, colorful cosmic jumpsuit, vibrant acrylic painting, glowing cosmic background, full body, whimsical expressive character";
 
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-
-    await new Promise((resolve, reject) => {
-      img.onload = resolve;
-      img.onerror = reject;
-      img.src = imageUrl;
+    const startRes = await fetch("https://api.replicate.com/v1/predictions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Token ${REPLICATE_API_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        version: "83757c9d",
+        input: {
+          prompt: prompt,
+          num_outputs: 1,
+          num_inference_steps: 28,
+          guidance_scale: 3.5,
+          output_format: "png",
+          output_quality: 90,
+        }
+      })
     });
 
-    const canvas = document.createElement('canvas');
-    canvas.width = img.width;
-    canvas.height = img.height;
-    canvas.getContext('2d').drawImage(img, 0, 0);
-    const dataUrl = canvas.toDataURL('image/png');
+    const prediction = await startRes.json();
+    console.log("Started:", prediction.id);
+
+    let result = null;
+    while (!result) {
+      await new Promise(r => setTimeout(r, 2000));
+      const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${prediction.id}`, {
+        headers: { "Authorization": `Token ${REPLICATE_API_TOKEN}` }
+      });
+      const poll = await pollRes.json();
+      console.log("Status:", poll.status);
+      if (poll.status === "succeeded") {
+        result = poll.output[0];
+      } else if (poll.status === "failed") {
+        throw new Error("Generation failed: " + poll.error);
+      }
+    }
 
     finishLoadingBar();
     await new Promise(r => setTimeout(r, 500));
 
     clearLoadingScene();
     document.getElementById('loadingScreen').classList.remove('active');
-    document.getElementById('resultImg').src = dataUrl;
-    document.getElementById('downloadBtn').href = dataUrl;
+    document.getElementById('resultImg').src = result;
+    document.getElementById('downloadBtn').href = result;
     document.getElementById('resultSection').classList.add('active');
     previewSect.style.display = 'none';
 
@@ -968,7 +981,7 @@ async function startTransform() {
     finishLoadingBar();
     clearLoadingScene();
     document.getElementById('loadingScreen').classList.remove('active');
-    document.getElementById('errorMsg').textContent = 'Something went wrong. Please try again!';
+    document.getElementById('errorMsg').textContent = 'Something went wrong: ' + err.message;
     document.getElementById('errorMsg').style.display = 'block';
     previewSect.style.display = 'block';
     console.error(err);
@@ -1014,4 +1027,3 @@ renderGallery();
 </script>
 </body>
 </html>
- 
