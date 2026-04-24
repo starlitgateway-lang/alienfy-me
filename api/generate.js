@@ -14,7 +14,7 @@ export default async function handler(req, res) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      version: '83757c9d',
+      version: '83757c9d89034c2543a5bcfff8e82983dcb2ebd17cc6799f9ababc1aedd3a598',
       input: {
         prompt: prompt,
         num_outputs: 1,
