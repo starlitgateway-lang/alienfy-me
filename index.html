@@ -943,9 +943,7 @@ async function startTransform() {
     let result = null;
     while (!result) {
       await new Promise(r => setTimeout(r, 2000));
-      const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${prediction.id}`, {
-        headers: { "Authorization": `Token ${REPLICATE_API_TOKEN}` }
-      });
+      const pollRes = await fetch(`/api/poll?id=${prediction.id}`);
       const poll = await pollRes.json();
       console.log("Status:", poll.status);
       if (poll.status === "succeeded") {
