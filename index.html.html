@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alienfy Me — by Starlit</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple: #8B5CF6;
+    --pink: #EC4899;
+    --teal: #14B8A6;
+    --yellow: #F59E0B;
+    --dark: #0D0B1E;
+    --darker: #07060F;
+    --card: rgba(255,255,255,0.05);
+    --border: rgba(255,255,255,0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--darker);
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  .cursor {
+    width: 20px; height: 20px;
+    border: 2px solid var(--purple);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s, border-color 0.3s;
+    transform: translate(-50%, -50%);
+  }
+
+  .stars {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .star {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle var(--d) infinite;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.5); }
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(7,6,15,0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.2rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--purple), var(--pink), var(--teal));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 2px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    transition: color 0.3s;
+    cursor: none;
+  }
+
+  .nav-links a:hover { color: var(--purple); }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 2rem;
+    padding-top: 80px;
+  }
+
+  .hero-tag {
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    color: var(--teal);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .hero h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #fff 0%, var(--purple) 40%, var(--pink) 70%, var(--teal) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    border: none;
+    border-radius: 100px;
+    color: #fff;
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-decoration: none;
+  }
+
+  .hero-cta:hover {
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 20px 60px rgba(139,92,246,0.5);
+  }
+
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 5rem 2rem;
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    color: var(--teal);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    text-align: center;
+  }
+
+  .section-title {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 3rem;
+    background: linear-gradient(135deg, #fff, var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .upload-zone {
+    border: 2px dashed var(--purple);
+    border-radius: 24px;
+    padding: 4rem 2rem;
+    text-align: center;
+    cursor: none;
+    transition: all 0.3s;
+    background: var(--card);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .upload-zone:hover {
+    border-color: var(--pink);
+    background: rgba(139,92,246,0.1);
+  }
+
+  .upload-zone.dragover {
+    border-color: var(--teal);
+    background: rgba(20,184,166,0.1);
+    transform: scale(1.02);
+  }
+
+  .upload-icon { font-size: 4rem; margin-bottom: 1rem; display: block; }
+  .upload-text { font-size: 1.2rem; color: rgba(255,255,255,0.8); margin-bottom: 0.5rem; }
+  .upload-sub { font-size: 0.85rem; color: rgba(255,255,255,0.4); margin-bottom: 1.5rem; }
+
+  .upload-btn {
+    padding: 0.75rem 2rem;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    border: none;
+    border-radius: 100px;
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: none;
+    letter-spacing: 1px;
+  }
+
+  #fileInput { display: none; }
+
+  .preview-section { display: none; margin-top: 2rem; text-align: center; }
+
+  .preview-img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 16px;
+    border: 2px solid var(--purple);
+  }
+
+  .transform-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    border: none;
+    border-radius: 100px;
+    color: #fff;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .transform-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 20px 60px rgba(139,92,246,0.5);
+  }
+
+  /* ── LOADING SCREEN ── */
+  .loading-screen {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: #07060F;
+    z-index: 1000;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .loading-screen.active { display: flex; }
+
+  .loading-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--purple);
+    margin-bottom: 0.5rem;
+    letter-spacing: 3px;
+    animation: pulse 2s infinite;
+    position: relative;
+    z-index: 10;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .loading-sub {
+    color: rgba(255,255,255,0.5);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    letter-spacing: 2px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .loading-bar-wrap {
+    width: 300px;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 100px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 10;
+  }
+
+  .loading-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--purple), var(--pink), var(--teal));
+    border-radius: 100px;
+    transition: width 0.5s ease;
+  }
+
+  /* Ground strip */
+  .ground {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: linear-gradient(to top, #1a0a3d, transparent);
+    z-index: 2;
+  }
+
+  /* Walking alien container */
+  .walk-stage {
+    position: absolute;
+    bottom: 20px;
+    left: 0; right: 0;
+    height: 160px;
+    z-index: 3;
+    overflow: hidden;
+  }
+
+  /* UFO container */
+  .sky-stage {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    bottom: 160px;
+    z-index: 3;
+    overflow: hidden;
+  }
+
+  .anim-alien {
+    position: absolute;
+    bottom: 0;
+    will-change: transform;
+  }
+
+  .anim-ufo {
+    position: absolute;
+    will-change: transform;
+  }
+
+  .anim-cow {
+    position: absolute;
+    will-change: transform;
+  }
+
+  /* Walk right animation */
+  @keyframes walkRight {
+    0%   { transform: translateX(-150px); }
+    100% { transform: translateX(calc(100vw + 150px)); }
+  }
+
+  /* Walk left animation (flipped) */
+  @keyframes walkLeft {
+    0%   { transform: translateX(calc(100vw + 150px)) scaleX(-1); }
+    100% { transform: translateX(-150px) scaleX(-1); }
+  }
+
+  /* UFO drift */
+  @keyframes ufoDrift {
+    0%   { transform: translateX(calc(100vw + 200px)) translateY(0px); }
+    25%  { transform: translateX(75vw) translateY(-15px); }
+    50%  { transform: translateX(50vw) translateY(5px); }
+    75%  { transform: translateX(25vw) translateY(-10px); }
+    100% { transform: translateX(-200px) translateY(0px); }
+  }
+
+  /* Cow beam up */
+  @keyframes beamUp {
+    0%   { transform: translateY(0) scale(1); opacity: 1; }
+    60%  { transform: translateY(-120px) scale(0.6); opacity: 0.8; }
+    100% { transform: translateY(-200px) scale(0.1); opacity: 0; }
+  }
+
+  /* Result */
+  .result-section { display: none; text-align: center; margin-top: 2rem; }
+  .result-section.active { display: block; }
+
+  .result-img {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 24px;
+    border: 3px solid var(--purple);
+    box-shadow: 0 0 60px rgba(139,92,246,0.4);
+    animation: reveal 0.8s ease-out;
+  }
+
+  @keyframes reveal {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .result-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .action-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 100px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    cursor: none;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+  }
+
+  .btn-download { background: linear-gradient(135deg, var(--teal), #0EA5E9); color: #fff; }
+  .btn-again { background: transparent; color: var(--purple); border: 2px solid var(--purple) !important; }
+  .btn-again:hover { background: var(--purple); color: #fff; }
+  .btn-gallery { background: linear-gradient(135deg, var(--yellow), var(--pink)); color: #fff; }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .gallery-card {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--card);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: none;
+  }
+
+  .gallery-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba(139,92,246,0.3);
+  }
+
+  .gallery-card img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+  .gallery-card-info { padding: 0.75rem 1rem; font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+
+  .gallery-empty {
+    text-align: center;
+    color: rgba(255,255,255,0.3);
+    padding: 4rem;
+    font-size: 1rem;
+    grid-column: 1/-1;
+  }
+
+  .commission-card, .donate-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 3rem;
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .commission-card h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--yellow), var(--pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .commission-card p, .donate-card p {
+    color: rgba(255,255,255,0.7);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2.5rem;
+    border: none;
+    border-radius: 100px;
+    color: #fff;
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    cursor: none;
+    text-decoration: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .cta-btn:hover { transform: scale(1.05); }
+  .btn-commission { background: linear-gradient(135deg, var(--yellow), var(--pink)); }
+  .btn-donate { background: linear-gradient(135deg, var(--purple), var(--teal)); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+    color: rgba(255,255,255,0.3);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+  }
+
+  .error-msg { color: #ff6b6b; font-size: 0.9rem; margin-top: 1rem; display: none; }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="stars" id="stars"></div>
+
+<nav>
+  <div class="logo">STARLIT</div>
+  <ul class="nav-links">
+    <li><a href="#alienfy">Alienfy Me</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#commission">Commission</a></li>
+    <li><a href="#donate">Donate</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <p class="hero-tag">✦ AI Art Experience by Starlit ✦</p>
+  <h1>ALIENFY<br>ME</h1>
+  <p class="hero-sub">Upload your photo. Become an alien.<br>In the original Starlit acrylic style.</p>
+  <a href="#alienfy" class="hero-cta">Begin Transformation →</a>
+</section>
+
+<section id="alienfy" style="max-width:800px; margin:0 auto;">
+  <p class="section-label">✦ The Experience ✦</p>
+  <h2 class="section-title">Alienfy Me</h2>
+
+  <div class="upload-zone" id="uploadZone">
+    <span class="upload-icon">👽</span>
+    <p class="upload-text">Drop your photo here</p>
+    <p class="upload-sub">or click to browse — JPG, PNG, WEBP</p>
+    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">Choose Photo</button>
+    <input type="file" id="fileInput" accept="image/*">
+  </div>
+
+  <div class="preview-section" id="previewSection">
+    <img class="preview-img" id="previewImg" src="" alt="Your photo">
+    <br>
+    <button class="transform-btn" onclick="startTransform()">✦ ALIENFY ME ✦</button>
+    <p class="error-msg" id="errorMsg"></p>
+  </div>
+
+  <div class="result-section" id="resultSection">
+    <img class="result-img" id="resultImg" src="" alt="Your alien self">
+    <div class="result-actions">
+      <a class="action-btn btn-download" id="downloadBtn" href="#" download="my-alien-by-starlit.png">↓ Download</a>
+      <button class="action-btn btn-gallery" onclick="addToGallery()">+ Add to Gallery</button>
+      <button class="action-btn btn-again" onclick="resetForm()">Try Again</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── LOADING SCREEN ── -->
+<div class="loading-screen" id="loadingScreen">
+  <p class="loading-title">TRANSMITTING TO THE COSMOS</p>
+  <p class="loading-sub">Painting your alien soul...</p>
+  <div class="loading-bar-wrap">
+    <div class="loading-bar" id="loadingBar"></div>
+  </div>
+  <div class="sky-stage" id="skyStage"></div>
+  <div class="walk-stage" id="walkStage"></div>
+  <div class="ground"></div>
+</div>
+
+<section id="gallery" style="max-width:1200px; margin:0 auto;">
+  <p class="section-label">✦ The Collective ✦</p>
+  <h2 class="section-title">Alien Gallery</h2>
+  <div class="gallery-grid" id="galleryGrid">
+    <div class="gallery-empty" id="galleryEmpty">No aliens yet. Be the first to transform! 👽</div>
+  </div>
+</section>
+
+<section id="commission">
+  <p class="section-label">✦ The Real Thing ✦</p>
+  <h2 class="section-title">Commission a Painting</h2>
+  <div class="commission-card">
+    <h3>Want a real Starlit original?</h3>
+    <p>Starlit is available for custom alien portrait commissions — hand painted in acrylic on canvas. Send your photo and get a one of a kind piece of alien art, painted by the original artist. Each painting is unique, signed, and ready to hang in your universe.</p>
+    <a href="mailto:starlit@alienfy.me" class="cta-btn btn-commission">✦ Request a Commission ✦</a>
+  </div>
+</section>
+
+<section id="donate">
+  <p class="section-label">✦ Support the Artist ✦</p>
+  <h2 class="section-title">Fuel the Art</h2>
+  <div class="donate-card">
+    <p>This experience is free because art should be for everyone. If your alien made you smile, consider supporting Starlit to keep creating weird and wonderful things.</p>
+    <a href="https://www.paypal.com/donate" target="_blank" class="cta-btn btn-donate">✦ Send a Little Love ✦</a>
+  </div>
+</section>
+
+<footer><p>© 2025 STARLIT · ALIENFY ME · ALL BEINGS WELCOME</p></footer>
+
+<script>
+/* ── Cursor ── */
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+
+/* ── Stars ── */
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 150; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 3 + 1;
+  s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;animation-delay:${Math.random()*4}s`;
+  starsEl.appendChild(s);
+}
+
+/* ────────────────────────────────────────────
+   CARTOON SVG CHARACTERS
+──────────────────────────────────────────── */
+
+function svgAlien(skinColor, eyeColor, suitColor, size) {
+  const w = size, h = size * 1.8;
+  return `<svg width="${w}" height="${h}" viewBox="0 0 80 144" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">
+    <!-- body shadow -->
+    <ellipse cx="40" cy="138" rx="18" ry="5" fill="rgba(0,0,0,0.3)"/>
+    <!-- legs -->
+    <g>
+      <rect x="27" y="104" width="10" height="28" rx="5" fill="${suitColor}"/>
+      <rect x="43" y="104" width="10" height="28" rx="5" fill="${suitColor}"/>
+      <!-- feet -->
+      <ellipse cx="32" cy="132" rx="9" ry="5" fill="#222"/>
+      <ellipse cx="48" cy="132" rx="9" ry="5" fill="#222"/>
+    </g>
+    <!-- suit body -->
+    <rect x="22" y="68" width="36" height="42" rx="10" fill="${suitColor}"/>
+    <!-- suit collar -->
+    <rect x="30" y="66" width="20" height="8" rx="4" fill="${skinColor}"/>
+    <!-- suit detail stripe -->
+    <rect x="37" y="78" width="6" height="20" rx="3" fill="rgba(255,255,255,0.25)"/>
+    <!-- arms -->
+    <rect x="8" y="70" width="16" height="9" rx="4" fill="${suitColor}"/>
+    <rect x="56" y="70" width="16" height="9" rx="4" fill="${suitColor}"/>
+    <!-- hands -->
+    <ellipse cx="10" cy="74" rx="7" ry="6" fill="${skinColor}"/>
+    <ellipse cx="70" cy="74" rx="7" ry="6" fill="${skinColor}"/>
+    <!-- fingers -->
+    <line x1="5" y1="70" x2="3" y2="66" stroke="${skinColor}" stroke-width="3" stroke-linecap="round"/>
+    <line x1="9" y1="68" x2="8" y2="63" stroke="${skinColor}" stroke-width="3" stroke-linecap="round"/>
+    <line x1="13" y1="68" x2="13" y2="63" stroke="${skinColor}" stroke-width="3" stroke-linecap="round"/>
+    <line x1="75" y1="70" x2="77" y2="66" stroke="${skinColor}" stroke-width="3" stroke-linecap="round"/>
+    <line x1="71" y1="68" x2="72" y2="63" stroke="${skinColor}" stroke-width="3" stroke-linecap="round"/>
+    <line x1="67" y1="68" x2="67" y2="63" stroke="${skinColor}" stroke-width="3" stroke-linecap="round"/>
+    <!-- neck -->
+    <rect x="34" y="58" width="12" height="12" rx="4" fill="${skinColor}"/>
+    <!-- head dome -->
+    <ellipse cx="40" cy="36" rx="28" ry="32" fill="${skinColor}"/>
+    <!-- head outline -->
+    <ellipse cx="40" cy="36" rx="28" ry="32" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="1.5"/>
+    <!-- eye sockets dark -->
+    <ellipse cx="27" cy="38" rx="11" ry="13" fill="rgba(0,0,0,0.8)"/>
+    <ellipse cx="53" cy="38" rx="11" ry="13" fill="rgba(0,0,0,0.8)"/>
+    <!-- eye color -->
+    <ellipse cx="27" cy="38" rx="8" ry="10" fill="${eyeColor}"/>
+    <ellipse cx="53" cy="38" rx="8" ry="10" fill="${eyeColor}"/>
+    <!-- eye shine -->
+    <circle cx="23" cy="33" r="3" fill="white" opacity="0.9"/>
+    <circle cx="49" cy="33" r="3" fill="white" opacity="0.9"/>
+    <circle cx="30" cy="36" r="1.5" fill="white" opacity="0.6"/>
+    <circle cx="56" cy="36" r="1.5" fill="white" opacity="0.6"/>
+    <!-- forehead gem diamond -->
+    <polygon points="40,8 45,14 40,20 35,14" fill="${eyeColor}" opacity="0.9"/>
+    <polygon points="40,10 44,14 40,18 36,14" fill="white" opacity="0.5"/>
+    <!-- tiny nose -->
+    <ellipse cx="40" cy="50" rx="3" ry="2" fill="rgba(0,0,0,0.2)"/>
+    <!-- mouth smile -->
+    <path d="M33 56 Q40 62 47 56" stroke="rgba(0,0,0,0.3)" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <!-- ear bumps -->
+    <ellipse cx="13" cy="36" rx="5" ry="7" fill="${skinColor}"/>
+    <ellipse cx="67" cy="36" rx="5" ry="7" fill="${skinColor}"/>
+  </svg>`;
+}
+
+function svgUFO(bodyColor, lightColor) {
+  return `<svg width="180" height="90" viewBox="0 0 180 90" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">
+    <!-- shadow -->
+    <ellipse cx="90" cy="88" rx="70" ry="6" fill="rgba(139,92,246,0.2)"/>
+    <!-- saucer bottom rim -->
+    <ellipse cx="90" cy="58" rx="78" ry="20" fill="${bodyColor}" opacity="0.95"/>
+    <!-- saucer rim outline -->
+    <ellipse cx="90" cy="58" rx="78" ry="20" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+    <!-- rim lights row -->
+    <circle cx="30" cy="60" r="6" fill="${lightColor}"/>
+    <circle cx="55" cy="65" r="6" fill="${lightColor}" opacity="0.8"/>
+    <circle cx="80" cy="67" r="6" fill="${lightColor}"/>
+    <circle cx="105" cy="67" r="6" fill="${lightColor}" opacity="0.8"/>
+    <circle cx="130" cy="65" r="6" fill="${lightColor}"/>
+    <circle cx="150" cy="60" r="6" fill="${lightColor}" opacity="0.8"/>
+    <!-- dome -->
+    <ellipse cx="90" cy="48" rx="45" ry="30" fill="${bodyColor}"/>
+    <ellipse cx="90" cy="44" rx="32" ry="22" fill="rgba(150,220,255,0.3)"/>
+    <!-- dome highlight -->
+    <ellipse cx="78" cy="36" rx="12" ry="8" fill="rgba(255,255,255,0.25)" transform="rotate(-20,78,36)"/>
+    <!-- dome outline -->
+    <ellipse cx="90" cy="48" rx="45" ry="30" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+    <!-- alien inside dome -->
+    <ellipse cx="90" cy="42" rx="14" ry="16" fill="rgba(139,92,246,0.5)"/>
+    <circle cx="85" cy="40" r="4" fill="rgba(0,0,0,0.6)"/>
+    <circle cx="95" cy="40" r="4" fill="rgba(0,0,0,0.6)"/>
+    <circle cx="84" cy="38" r="1.5" fill="white"/>
+    <circle cx="94" cy="38" r="1.5" fill="white"/>
+    <!-- beam -->
+    <polygon points="62,74 118,74 130,90 50,90" fill="rgba(255,255,150,0.12)"/>
+    <line x1="90" y1="74" x2="90" y2="90" stroke="rgba(255,255,150,0.3)" stroke-width="1" stroke-dasharray="4,3"/>
+  </svg>`;
+}
+
+function svgCow() {
+  return `<svg width="70" height="60" viewBox="0 0 70 60" xmlns="http://www.w3.org/2000/svg">
+    <!-- legs -->
+    <rect x="18" y="42" width="7" height="14" rx="3" fill="#888"/>
+    <rect x="28" y="42" width="7" height="14" rx="3" fill="#888"/>
+    <rect x="38" y="42" width="7" height="14" rx="3" fill="#888"/>
+    <rect x="48" y="42" width="7" height="14" rx="3" fill="#888"/>
+    <!-- body -->
+    <ellipse cx="35" cy="36" rx="24" ry="14" fill="white" stroke="#ccc" stroke-width="1.5"/>
+    <!-- spots -->
+    <ellipse cx="28" cy="32" rx="7" ry="5" fill="#555" opacity="0.7"/>
+    <ellipse cx="44" cy="38" rx="5" ry="4" fill="#555" opacity="0.6"/>
+    <!-- udder -->
+    <ellipse cx="35" cy="48" rx="8" ry="5" fill="#ffb6c1"/>
+    <!-- neck -->
+    <rect x="14" y="24" width="12" height="14" rx="4" fill="white" stroke="#ccc" stroke-width="1"/>
+    <!-- head -->
+    <ellipse cx="14" cy="20" rx="13" ry="11" fill="white" stroke="#ccc" stroke-width="1.5"/>
+    <!-- snout -->
+    <ellipse cx="6" cy="22" rx="7" ry="5" fill="#ffb6c1"/>
+    <circle cx="4" cy="22" r="2" fill="#cc8899"/>
+    <circle cx="8" cy="22" r="2" fill="#cc8899"/>
+    <!-- eye -->
+    <circle cx="17" cy="16" r="3" fill="#333"/>
+    <circle cx="16" cy="15" r="1" fill="white"/>
+    <!-- ear -->
+    <ellipse cx="26" cy="12" rx="5" ry="7" fill="white" stroke="#ccc" stroke-width="1"/>
+    <ellipse cx="26" cy="12" rx="3" ry="5" fill="#ffb6c1"/>
+    <!-- horns -->
+    <line x1="20" y1="10" x2="24" y2="4" stroke="#888" stroke-width="3" stroke-linecap="round"/>
+    <line x1="8" y1="10" x2="4" y2="4" stroke="#888" stroke-width="3" stroke-linecap="round"/>
+    <!-- mouth -->
+    <path d="M4 25 Q6 28 9 25" stroke="#cc8899" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  </svg>`;
+}
+
+/* ── Alien palette data ── */
+const alienTypes = [
+  { skin:'#C084FC', eye:'#14B8A6', suit:'#3B82F6' },
+  { skin:'#34D399', eye:'#F59E0B', suit:'#7C3AED' },
+  { skin:'#F472B6', eye:'#0EA5E9', suit:'#059669' },
+  { skin:'#FCD34D', eye:'#EC4899', suit:'#1D4ED8' },
+  { skin:'#67E8F9', eye:'#F97316', suit:'#9333EA' },
+  { skin:'#A3E635', eye:'#8B5CF6', suit:'#DC2626' },
+];
+
+const ufoTypes = [
+  { body:'#6D28D9', light:'#14B8A6' },
+  { body:'#0F766E', light:'#F59E0B' },
+  { body:'#9D174D', light:'#67E8F9' },
+];
+
+/* ── Spawn into loading screen ── */
+let spawnInterval = null;
+let loadingTimers = [];
+
+function clearLoadingScene() {
+  const walk = document.getElementById('walkStage');
+  const sky  = document.getElementById('skyStage');
+  walk.innerHTML = '';
+  sky.innerHTML  = '';
+  loadingTimers.forEach(t => clearTimeout(t));
+  loadingTimers = [];
+  if (spawnInterval) { clearInterval(spawnInterval); spawnInterval = null; }
+}
+
+function spawnWalkingAlien() {
+  const walk = document.getElementById('walkStage');
+  const t = alienTypes[Math.floor(Math.random() * alienTypes.length)];
+  const size = 50 + Math.random() * 40;
+  const dur  = 7 + Math.random() * 8;
+  const dir  = Math.random() > 0.5 ? 'right' : 'left';
+  const bot  = 0 + Math.random() * 30;
+
+  const el = document.createElement('div');
+  el.className = 'anim-alien';
+  el.style.bottom = bot + 'px';
+  el.innerHTML = svgAlien(t.skin, t.eye, t.suit, size);
+  el.style.animation = `${dir === 'right' ? 'walkRight' : 'walkLeft'} ${dur}s linear forwards`;
+  walk.appendChild(el);
+  const timer = setTimeout(() => el.remove(), dur * 1000 + 500);
+  loadingTimers.push(timer);
+}
+
+function spawnUFO() {
+  const sky = document.getElementById('skyStage');
+  const t   = ufoTypes[Math.floor(Math.random() * ufoTypes.length)];
+  const dur = 12 + Math.random() * 8;
+  const top = 20 + Math.random() * 40;
+
+  const el = document.createElement('div');
+  el.className = 'anim-ufo';
+  el.style.top = top + '%';
+  el.innerHTML = svgUFO(t.body, t.light);
+  el.style.animation = `ufoDrift ${dur}s ease-in-out forwards`;
+  sky.appendChild(el);
+
+  // Spawn cow under ufo after 3s
+  const cowTimer = setTimeout(() => {
+    const rect = el.getBoundingClientRect();
+    const cow  = document.createElement('div');
+    cow.className = 'anim-cow';
+    cow.innerHTML = svgCow();
+    cow.style.cssText = `left:${rect.left + 40}px; bottom: 20px; animation: beamUp 3s ease-in forwards;`;
+    document.getElementById('walkStage').appendChild(cow);
+    const rm = setTimeout(() => cow.remove(), 3500);
+    loadingTimers.push(rm);
+  }, 3000);
+
+  loadingTimers.push(cowTimer);
+
+  const rm = setTimeout(() => el.remove(), dur * 1000 + 500);
+  loadingTimers.push(rm);
+}
+
+function startLoadingScene() {
+  clearLoadingScene();
+  // Immediate spawns
+  spawnWalkingAlien(); spawnWalkingAlien(); spawnWalkingAlien();
+  spawnUFO(); spawnUFO();
+  // Keep spawning
+  spawnInterval = setInterval(() => {
+    spawnWalkingAlien();
+    if (Math.random() > 0.6) spawnUFO();
+  }, 2500);
+}
+
+/* ── Loading bar progress ── */
+let barInterval = null;
+
+function startLoadingBar() {
+  const bar = document.getElementById('loadingBar');
+  bar.style.width = '0%';
+  let pct = 0;
+  barInterval = setInterval(() => {
+    const step = pct < 40 ? 3 : pct < 70 ? 1.5 : pct < 88 ? 0.5 : 0.1;
+    pct = Math.min(pct + step, 92);
+    bar.style.width = pct + '%';
+  }, 400);
+}
+
+function finishLoadingBar() {
+  if (barInterval) clearInterval(barInterval);
+  document.getElementById('loadingBar').style.width = '100%';
+}
+
+/* ── File upload ── */
+const fileInput   = document.getElementById('fileInput');
+const uploadZone  = document.getElementById('uploadZone');
+const previewSect = document.getElementById('previewSection');
+let currentImageData = null;
+
+uploadZone.addEventListener('dragover',  e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.classList.remove('dragover');
+  if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+});
+uploadZone.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', e => { if (e.target.files[0]) handleFile(e.target.files[0]); });
+
+function handleFile(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    currentImageData = e.target.result;
+    document.getElementById('previewImg').src = currentImageData;
+    previewSect.style.display = 'block';
+    document.getElementById('resultSection').classList.remove('active');
+    document.getElementById('errorMsg').style.display = 'none';
+    uploadZone.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ── Transform ── */
+async function startTransform() {
+  if (!currentImageData) return;
+
+  document.getElementById('loadingScreen').classList.add('active');
+  startLoadingScene();
+  startLoadingBar();
+
+  try {
+    const prompt = encodeURIComponent(
+      "An alien character portrait in acrylic painting style by artist Starlit. " +
+      "Large elongated dome head, huge oversized wraparound black almond-shaped eyes with white highlight dots, " +
+      "small diamond gem shape on forehead, smooth vibrant alien skin in purple or green or pink or teal, " +
+      "wearing a colorful cosmic jumpsuit outfit, " +
+      "warm glowing cosmic background with stars and nebula, " +
+      "whimsical expressive character art, bold acrylic brushwork, " +
+      "vibrant saturated colors, full body portrait, high quality painting, no humans"
+    );
+
+    const seed = Math.floor(Math.random() * 999999);
+    const imageUrl = `https://image.pollinations.ai/prompt/${prompt}?width=1024&height=1024&seed=${seed}&nologo=true&model=flux`;
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = reject;
+      img.src = imageUrl;
+    });
+
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    canvas.getContext('2d').drawImage(img, 0, 0);
+    const dataUrl = canvas.toDataURL('image/png');
+
+    finishLoadingBar();
+    await new Promise(r => setTimeout(r, 500));
+
+    clearLoadingScene();
+    document.getElementById('loadingScreen').classList.remove('active');
+    document.getElementById('resultImg').src = dataUrl;
+    document.getElementById('downloadBtn').href = dataUrl;
+    document.getElementById('resultSection').classList.add('active');
+    previewSect.style.display = 'none';
+
+  } catch (err) {
+    finishLoadingBar();
+    clearLoadingScene();
+    document.getElementById('loadingScreen').classList.remove('active');
+    document.getElementById('errorMsg').textContent = 'Something went wrong. Please try again!';
+    document.getElementById('errorMsg').style.display = 'block';
+    previewSect.style.display = 'block';
+    console.error(err);
+  }
+}
+
+/* ── Gallery ── */
+let gallery = JSON.parse(localStorage.getItem('alienGallery') || '[]');
+
+function renderGallery() {
+  const grid  = document.getElementById('galleryGrid');
+  const empty = document.getElementById('galleryEmpty');
+  if (gallery.length === 0) { empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  grid.innerHTML = '';
+  gallery.slice().reverse().forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'gallery-card';
+    card.innerHTML = `<img src="${item.url}" alt="Alien ${i+1}" loading="lazy"><div class="gallery-card-info">${item.date}</div>`;
+    grid.appendChild(card);
+  });
+}
+
+function addToGallery() {
+  const src = document.getElementById('resultImg').src;
+  if (!src) return;
+  gallery.push({ url: src, date: new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) });
+  if (gallery.length > 50) gallery.shift();
+  localStorage.setItem('alienGallery', JSON.stringify(gallery));
+  renderGallery();
+  document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetForm() {
+  uploadZone.style.display = 'block';
+  previewSect.style.display = 'none';
+  document.getElementById('resultSection').classList.remove('active');
+  fileInput.value = '';
+  currentImageData = null;
+}
+
+renderGallery();
+</script>
+</body>
+</html>
