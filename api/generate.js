@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     const response = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
       headers: {
-        'Authorization': `r8_8NqXJLMVio4698ZaRpwP30fD12vYWqJ33DKtV`,
+        'Authorization': `Token ${process.env.REPLICATE_API_TOKEN}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -29,6 +29,11 @@ export default async function handler(req, res) {
 
     const data = await response.json();
     res.status(200).json(data);
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
 
   } catch (err) {
     res.status(500).json({ error: err.message });
