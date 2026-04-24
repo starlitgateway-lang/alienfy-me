@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   
   const response = await fetch(`https://api.replicate.com/v1/predictions/${id}`, {
     headers: {
-      'Authorization': `Token r8_YOUR_ACTUAL_TOKEN_HERE`,
+      'Authorization': `r8_9XdMegrSNNwa9noZrJ3cYOKn6Bm0Vb71fV8iQ`,
     }
   });
   
