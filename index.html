@@ -934,7 +934,7 @@ async function startTransform() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ prompt: prompt })
+      body: JSON.stringify({ prompt: prompt, image: currentImageData })
     });
 
     const prediction = await startRes.json();
