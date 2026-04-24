@@ -5,7 +5,7 @@ export default async function handler(req, res) {
 
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const { prompt } = req.body;
+  const { prompt, image } = req.body;
 
   const response = await fetch('https://api.replicate.com/v1/predictions', {
     method: 'POST',
@@ -17,11 +17,13 @@ export default async function handler(req, res) {
       version: '83757c9d89034c2543a5bcfff8e82983dcb2ebd17cc6799f9ababc1aedd3a598',
       input: {
         prompt: prompt,
+        image: image,
         num_outputs: 1,
         num_inference_steps: 28,
         guidance_scale: 3.5,
         output_format: 'png',
         output_quality: 90,
+        image_to_image_strength: 0.7,
       }
     })
   });
