@@ -938,7 +938,8 @@ async function startTransform() {
     });
 
     const prediction = await startRes.json();
-    console.log("Started:", prediction.id);
+console.log("Full prediction response:", JSON.stringify(prediction));
+console.log("Started:", prediction.id);
 
     let result = null;
     while (!result) {
