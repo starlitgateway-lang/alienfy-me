@@ -930,23 +930,12 @@ async function startTransform() {
 
     const prompt = "STARLIT style alien portrait, large dome head, huge black almond eyes with white highlight dots, diamond gem on forehead, colorful cosmic jumpsuit, vibrant acrylic painting, glowing cosmic background, full body, whimsical expressive character";
 
-    const startRes = await fetch("https://api.replicate.com/v1/predictions", {
+    const startRes = await fetch("/api/generate", {
       method: "POST",
       headers: {
-        "Authorization": `Token ${REPLICATE_API_TOKEN}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        version: "83757c9d",
-        input: {
-          prompt: prompt,
-          num_outputs: 1,
-          num_inference_steps: 28,
-          guidance_scale: 3.5,
-          output_format: "png",
-          output_quality: 90,
-        }
-      })
+      body: JSON.stringify({ prompt: prompt })
     });
 
     const prediction = await startRes.json();
