@@ -27,13 +27,15 @@ export default async function handler(req, res) {
       })
     });
 
-    const data = await response.json();
-    res.status(200).json(data);
-
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-}
+    const text = await response.text();
+    console.log("Replicate raw response:", text);
+    
+    try {
+      const data = JSON.parse(text);
+      res.status(200).json(data);
+    } catch(e) {
+      res.status(500).json({ error: "Replicate error: " + text });
+    }
 
   } catch (err) {
     res.status(500).json({ error: err.message });
