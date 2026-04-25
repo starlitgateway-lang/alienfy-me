@@ -1,123 +1,120 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Alienfy Me — by Starlit</title>
-<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --red:    #FF1F1F;
-    --yellow: #FFE000;
-    --blue:   #0055FF;
-    --purple: #9B00FF;
-    --pink:   #FF00CC;
-    --teal:   #00FFCC;
-    --orange: #FF6B00;
-    --black:  #0A0A0A;
+    --green:   #00FF41;
+    --dimgreen:#00AA2B;
+    --yellow:  #FFD700;
+    --orange:  #FF6B00;
+    --red:     #CC0000;
+    --fog:     rgba(0,255,65,0.06);
+    --dark:    #020A02;
+    --darker:  #010401;
+    --card:    rgba(0,255,65,0.04);
+    --border:  rgba(0,255,65,0.2);
+    --purple:  #9B00FF;
+    --pink:    #FF00CC;
+    --teal:    #00FFCC;
   }
 
   * { margin:0; padding:0; box-sizing:border-box; }
 
   body {
-    background: #fff;
-    color: var(--black);
-    font-family: 'Space Grotesk', sans-serif;
+    background: var(--darker);
+    color: var(--green);
+    font-family: 'Space Mono', monospace;
     overflow-x: hidden;
     cursor: none;
+    min-height: 100vh;
   }
 
   /* ── CURSOR ── */
   .cursor {
-    width: 20px; height: 20px;
-    border: 3px solid var(--red);
+    width: 16px; height: 16px;
+    border: 2px solid var(--green);
     border-radius: 50%;
     position: fixed;
     pointer-events: none;
     z-index: 9999;
     transform: translate(-50%,-50%);
+    box-shadow: 0 0 8px var(--green);
   }
 
-  /* ── COMIC BG ── */
-  .comic-bg {
+  /* ── STAR FIELD ── */
+  .starfield {
     position: fixed;
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    background-image: url("https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/20241102_110223%20(1).jpg"), url("https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/20241214_093327.jpg"), url("https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/20250614_145600%20(1).jpg"), url("https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/20251019_094050.jpg"), url("https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/20251027_111520.jpg"), url("https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/20251116_133447.jpg"), url("https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/20251128_103626.jpg"), url("https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/PhotoShot_1737852861270.jpeg"), url("https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/PhotoShot_1748396169262.jpeg"), url("https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/PhotoShot_1759690898402.jpeg");
-    background-size: 300px 300px, 300px 300px, 300px 300px, 300px 300px, 300px 300px, 300px 300px, 300px 300px, 300px 300px, 300px 300px, 300px 300px;
-    background-position: 0px 0px, 300px 0px, 600px 0px, 900px 0px, 0px 300px, 300px 300px, 600px 300px, 900px 300px, 150px 150px, 450px 450px;
-    background-repeat: repeat;
-    filter: grayscale(100%) contrast(1.1);
-    opacity: 0.25;
+    background: 
+      radial-gradient(ellipse at 20% 50%, rgba(0,60,0,0.3) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(0,40,0,0.2) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(0,80,0,0.15) 0%, transparent 40%),
+      #010401;
   }
 
-  .comic-bg::before {
+  /* scan lines */
+  .starfield::after {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(circle, #000 1.2px, transparent 1.2px);
-    background-size: 14px 14px;
-    opacity: 0.3;
-    z-index: 1;
-  }
-
-  .comic-bg::after {
-    content: '';
-    position: absolute;
-    inset: -100%;
-    background: repeating-conic-gradient(
-      rgba(0,0,0,0.02) 0deg 3deg,
-      transparent 3deg 6deg
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.15) 2px,
+      rgba(0,0,0,0.15) 4px
     );
+    pointer-events: none;
     z-index: 1;
   }
 
-  /* B&W comic panels - your paintings in greyscale with color pops */
-  .panel {
-    position: absolute;
-    overflow: hidden;
-    border: 5px solid #000;
-    box-shadow: 5px 5px 0 #000;
-    z-index: 2;
-  }
-
-  .panel img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    filter: grayscale(100%) contrast(1.2);
-    transition: filter 0.4s;
-  }
-
-  .panel:hover img {
-    filter: grayscale(0%) contrast(1.1) saturate(1.3);
-  }
-
-  /* Comic word burst shapes */
-  .burst {
-    position: absolute;
-    z-index: 3;
-    pointer-events: none;
-    font-family: 'Bangers', cursive;
-    font-size: 1.4rem;
-    letter-spacing: 2px;
-    -webkit-text-stroke: 1px #000;
-  }
-
-  /* Dark overlay so content reads */
-  .page-overlay {
+  /* fog layers */
+  .fog {
     position: fixed;
     inset: 0;
-    z-index: 3;
+    z-index: 1;
     pointer-events: none;
-    background: linear-gradient(
-      to bottom,
-      rgba(255,255,255,0.88) 0%,
-      rgba(255,255,255,0.82) 50%,
-      rgba(255,255,255,0.88) 100%
-    );
+    background:
+      radial-gradient(ellipse at 30% 60%, rgba(0,255,65,0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 30%, rgba(0,180,50,0.04) 0%, transparent 40%);
+    animation: fogDrift 20s ease-in-out infinite alternate;
+  }
+
+  @keyframes fogDrift {
+    0%   { transform: translate(0,0) scale(1); }
+    100% { transform: translate(30px,20px) scale(1.05); }
+  }
+
+  /* your paintings tiling background - desaturated */
+  .paintings-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.06;
+    background-image: 
+      url('https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/20241102_110223%20(1).jpg'),
+      url('https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/20241214_093327.jpg'),
+      url('https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/20250614_145600%20(1).jpg'),
+      url('https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/20251019_094050.jpg'),
+      url('https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/20251027_111520.jpg'),
+      url('https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/20251116_133447.jpg'),
+      url('https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/20251128_103626.jpg'),
+      url('https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/PhotoShot_1737852861270.jpeg'),
+      url('https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/PhotoShot_1748396169262.jpeg'),
+      url('https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/PhotoShot_1759690898402.jpeg');
+    background-size: 300px 300px;
+    background-position:
+      0px 0px, 300px 0px, 600px 0px, 900px 0px, 1200px 0px,
+      150px 300px, 450px 300px, 750px 300px, 1050px 300px, 1350px 300px;
+    background-repeat: repeat;
+    filter: grayscale(100%) sepia(100%) hue-rotate(80deg) saturate(3);
   }
 
   /* ── NAV ── */
@@ -125,35 +122,41 @@
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 100;
-    padding: 0.7rem 2rem;
+    padding: 0.8rem 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #000;
-    border-bottom: 4px solid var(--yellow);
+    background: rgba(1,4,1,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
   }
 
   .logo {
-    font-family: 'Bangers', cursive;
-    font-size: 2rem;
-    letter-spacing: 5px;
-    color: var(--yellow);
-    -webkit-text-stroke: 1px #000;
+    font-family: 'Orbitron', monospace;
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--green);
+    letter-spacing: 6px;
+    text-shadow: 0 0 20px var(--green), 0 0 40px var(--green);
   }
 
   .nav-links { display:flex; gap:2rem; list-style:none; }
 
   .nav-links a {
-    color: #fff;
+    color: var(--dimgreen);
     text-decoration: none;
-    font-family: 'Bangers', cursive;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
     cursor: none;
-    transition: color 0.2s;
+    transition: color 0.3s, text-shadow 0.3s;
   }
 
-  .nav-links a:hover { color: var(--yellow); }
+  .nav-links a:hover {
+    color: var(--green);
+    text-shadow: 0 0 10px var(--green);
+  }
 
   /* ── HERO ── */
   .hero {
@@ -169,61 +172,138 @@
     padding-top: 80px;
   }
 
-  .hero-tag {
-    font-family: 'Bangers', cursive;
-    font-size: 0.9rem;
-    letter-spacing: 6px;
-    color: var(--purple);
-    margin-bottom: 0.5rem;
+  /* retro poster distressed text */
+  .hero-eyebrow {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 8px;
+    color: var(--dimgreen);
+    margin-bottom: 2rem;
+    text-transform: uppercase;
   }
 
-  .hero h1 {
-    font-family: 'Bangers', cursive;
-    font-size: clamp(5rem, 14vw, 12rem);
+  .hero-title-wrap {
+    position: relative;
+    margin-bottom: 2rem;
+  }
+
+  /* The big ALIEN style title */
+  .hero-big {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1rem, 4vw, 3rem);
+    font-weight: 400;
+    letter-spacing: clamp(8px, 3vw, 30px);
+    color: rgba(0,255,65,0.3);
+    display: block;
+    text-transform: uppercase;
+    margin-bottom: -0.5rem;
+  }
+
+  .hero-main {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(4rem, 14vw, 13rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
     line-height: 0.85;
-    margin-bottom: 1.2rem;
-    -webkit-text-stroke: 4px #000;
-    paint-order: stroke fill;
-    filter: drop-shadow(6px 6px 0 rgba(0,0,0,0.2));
+    display: block;
+    background: linear-gradient(180deg, #fff 0%, var(--green) 40%, var(--dimgreen) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+    filter: drop-shadow(0 0 30px rgba(0,255,65,0.4));
   }
 
-  .line1 { color: var(--yellow); display:block; }
-  .line2 { color: var(--red);    display:block; transform: rotate(-2deg); display:inline-block; }
+  .hero-sub-title {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(0.6rem, 1.8vw, 1.3rem);
+    font-weight: 400;
+    letter-spacing: clamp(4px, 2vw, 20px);
+    color: rgba(0,255,65,0.4);
+    display: block;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
 
-  .hero-sub {
-    font-size: 1rem;
-    color: #000;
+  /* Glowing egg underneath title like the poster */
+  .egg-glow {
+    width: 200px;
+    height: 120px;
+    margin: 1.5rem auto;
+    position: relative;
+  }
+
+  .egg-glow::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 80px;
+    background: radial-gradient(ellipse, rgba(0,255,65,0.25) 0%, transparent 70%);
+    filter: blur(10px);
+  }
+
+  .egg-glow::after {
+    content: '👽';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    font-size: 5rem;
+    filter: drop-shadow(0 0 20px var(--green)) drop-shadow(0 0 40px var(--green));
+    animation: float 4s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50%      { transform: translateX(-50%) translateY(-12px); }
+  }
+
+  .hero-tagline {
+    font-size: 0.8rem;
+    color: rgba(0,255,65,0.5);
+    letter-spacing: 3px;
     margin-bottom: 2.5rem;
-    background: var(--yellow);
-    border: 3px solid #000;
-    padding: 0.6rem 1.5rem;
-    box-shadow: 4px 4px 0 var(--purple);
-    max-width: 480px;
-    font-weight: 600;
+    font-style: italic;
   }
 
   .hero-cta {
     display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 1rem 2.5rem;
-    background: var(--red);
-    border: 4px solid #000;
-    color: #fff;
-    font-family: 'Bangers', cursive;
-    font-size: 1.5rem;
-    letter-spacing: 3px;
+    gap: 1rem;
+    padding: 0.9rem 2.5rem;
+    background: transparent;
+    border: 1px solid var(--green);
+    color: var(--green);
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 4px;
     cursor: none;
-    box-shadow: 6px 6px 0 #000;
     text-decoration: none;
-    transition: transform 0.15s, box-shadow 0.15s;
-    -webkit-text-stroke: 0.5px #000;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    box-shadow: 0 0 20px rgba(0,255,65,0.2), inset 0 0 20px rgba(0,255,65,0.05);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--green);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+    z-index: -1;
   }
 
   .hero-cta:hover {
-    transform: translate(-3px,-3px);
-    box-shadow: 9px 9px 0 #000;
+    color: #000;
+    box-shadow: 0 0 40px rgba(0,255,65,0.6);
   }
+
+  .hero-cta:hover::before { transform: scaleX(1); }
 
   /* ── SECTIONS ── */
   section {
@@ -233,96 +313,129 @@
   }
 
   .section-label {
-    font-family: 'Bangers', cursive;
-    font-size: 0.85rem;
-    letter-spacing: 5px;
-    color: var(--purple);
+    font-family: 'Orbitron', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 6px;
+    color: var(--dimgreen);
     text-align: center;
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
   }
 
   .section-title {
-    font-family: 'Bangers', cursive;
-    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.5rem, 4vw, 3.5rem);
+    font-weight: 900;
     text-align: center;
     margin-bottom: 3rem;
-    -webkit-text-stroke: 2px #000;
-    paint-order: stroke fill;
+    letter-spacing: 4px;
+    text-transform: uppercase;
   }
 
-  .t-yellow { color: var(--yellow); }
-  .t-pink   { color: var(--pink); }
-  .t-teal   { color: var(--teal); }
-  .t-purple { color: var(--purple); }
-  .t-red    { color: var(--red); }
-  .t-blue   { color: var(--blue); }
+  .t-green  { color: var(--green);  text-shadow: 0 0 20px var(--green); }
+  .t-yellow { color: var(--yellow); text-shadow: 0 0 20px var(--yellow); }
+  .t-pink   { color: var(--pink);   text-shadow: 0 0 20px var(--pink); }
+  .t-teal   { color: var(--teal);   text-shadow: 0 0 20px var(--teal); }
+  .t-purple { color: var(--purple); text-shadow: 0 0 20px var(--purple); }
+  .t-orange { color: var(--orange); text-shadow: 0 0 20px var(--orange); }
+
+  /* horizontal rule lines like retro poster */
+  .rule {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .rule::before, .rule::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .rule span {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 4px;
+    color: var(--dimgreen);
+  }
 
   /* ── UPLOAD ── */
   .upload-zone {
-    border: 4px dashed #000;
+    border: 1px solid var(--border);
     padding: 4rem 2rem;
     text-align: center;
     cursor: none;
-    transition: all 0.2s;
-    background: rgba(255,255,255,0.9);
+    transition: all 0.3s;
+    background: var(--card);
     max-width: 680px;
     margin: 0 auto;
-    box-shadow: 6px 6px 0 #000;
     position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,255,65,0.05), inset 0 0 40px rgba(0,255,65,0.02);
   }
 
-  .upload-zone::before {
+  /* corner brackets like retro sci-fi UI */
+  .upload-zone::before, .upload-zone::after {
     content: '';
     position: absolute;
-    inset: 6px;
-    border: 2px solid #000;
-    pointer-events: none;
+    width: 20px; height: 20px;
+    border-color: var(--green);
+    border-style: solid;
   }
+
+  .upload-zone::before { top:8px; left:8px; border-width:1px 0 0 1px; }
+  .upload-zone::after  { bottom:8px; right:8px; border-width:0 1px 1px 0; }
 
   .upload-zone:hover {
-    border-color: var(--red);
-    background: #fff8e1;
-    transform: translate(-2px,-2px);
-    box-shadow: 8px 8px 0 #000;
+    border-color: var(--green);
+    box-shadow: 0 0 60px rgba(0,255,65,0.15), inset 0 0 40px rgba(0,255,65,0.05);
   }
 
-  .upload-zone.dragover { border-color: var(--blue); background: #e8f4ff; }
+  .upload-zone.dragover { border-color: var(--teal); box-shadow: 0 0 60px rgba(0,255,204,0.2); }
 
-  .upload-icon { font-size: 5rem; margin-bottom: 1rem; display: block; }
+  .upload-icon { font-size: 4rem; margin-bottom: 1.5rem; display: block; filter: drop-shadow(0 0 15px var(--green)); }
 
   .upload-text {
-    font-family: 'Bangers', cursive;
-    font-size: 2rem;
-    letter-spacing: 2px;
-    color: #000;
-    margin-bottom: 0.4rem;
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    letter-spacing: 4px;
+    color: var(--green);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px var(--green);
   }
 
-  .upload-sub { font-size: 0.85rem; color: #555; margin-bottom: 1.5rem; }
+  .upload-sub { font-size: 0.75rem; color: var(--dimgreen); margin-bottom: 2rem; letter-spacing: 2px; }
 
   .upload-btn {
     padding: 0.7rem 2rem;
-    background: var(--purple);
-    border: 3px solid #000;
-    color: #fff;
-    font-family: 'Bangers', cursive;
-    font-size: 1.2rem;
-    letter-spacing: 2px;
+    background: transparent;
+    border: 1px solid var(--green);
+    color: var(--green);
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 4px;
     cursor: none;
-    box-shadow: 4px 4px 0 #000;
-    transition: transform 0.15s, box-shadow 0.15s;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    box-shadow: 0 0 15px rgba(0,255,65,0.15);
   }
 
-  .upload-btn:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 #000; }
+  .upload-btn:hover { background: var(--green); color: #000; box-shadow: 0 0 30px rgba(0,255,65,0.4); }
 
   #fileInput { display: none; }
 
   .preview-section { display:none; margin-top:2rem; text-align:center; }
 
   .preview-img {
-    width: 100%; max-width: 380px;
-    border: 4px solid #000;
-    box-shadow: 6px 6px 0 #000;
+    width: 100%; max-width: 400px;
+    border: 1px solid var(--border);
+    box-shadow: 0 0 30px rgba(0,255,65,0.1);
   }
 
   .transform-btn {
@@ -331,25 +444,41 @@
     gap: 0.75rem;
     margin-top: 1.5rem;
     padding: 1rem 2.5rem;
-    background: var(--yellow);
-    border: 4px solid #000;
-    color: #000;
-    font-family: 'Bangers', cursive;
-    font-size: 1.5rem;
-    letter-spacing: 3px;
+    background: transparent;
+    border: 1px solid var(--yellow);
+    color: var(--yellow);
+    font-family: 'Orbitron', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 4px;
     cursor: none;
-    box-shadow: 6px 6px 0 #000;
-    transition: transform 0.15s, box-shadow 0.15s;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    box-shadow: 0 0 20px rgba(255,215,0,0.2);
+    position: relative;
+    overflow: hidden;
   }
 
-  .transform-btn:hover { transform: translate(-3px,-3px); box-shadow: 9px 9px 0 #000; }
+  .transform-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--yellow);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+    z-index: -1;
+  }
+
+  .transform-btn:hover { color: #000; box-shadow: 0 0 40px rgba(255,215,0,0.5); }
+  .transform-btn:hover::before { transform: scaleX(1); }
 
   /* ── LOADING ── */
   .loading-screen {
     display: none;
     position: fixed;
     inset: 0;
-    background: #fff;
+    background: #010401;
     z-index: 1000;
     flex-direction: column;
     align-items: center;
@@ -357,86 +486,92 @@
     overflow: hidden;
   }
 
-  /* B&W halftone loading bg */
   .loading-screen::before {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(circle, #000 1.5px, transparent 1.5px);
-    background-size: 16px 16px;
-    opacity: 0.07;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0,0,0,0.2) 2px, rgba(0,0,0,0.2) 4px
+    );
     z-index: 0;
+    pointer-events: none;
   }
 
   .loading-screen.active { display: flex; }
 
   .loading-title {
-    font-family: 'Bangers', cursive;
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    color: var(--red);
-    -webkit-text-stroke: 2px #000;
-    letter-spacing: 4px;
-    margin-bottom: 0.4rem;
-    animation: zap 0.4s infinite alternate;
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1rem, 3vw, 2rem);
+    font-weight: 900;
+    color: var(--green);
+    letter-spacing: 6px;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    text-shadow: 0 0 20px var(--green);
+    animation: glitch 3s infinite;
     position: relative;
     z-index: 10;
   }
 
-  @keyframes zap {
-    0%   { transform: skewX(-2deg) scale(1); color: var(--red); }
-    100% { transform: skewX(2deg) scale(1.04); color: var(--yellow); -webkit-text-stroke: 2px #000; }
+  @keyframes glitch {
+    0%,90%,100% { transform: none; text-shadow: 0 0 20px var(--green); }
+    92% { transform: skewX(-5deg); text-shadow: -3px 0 var(--pink), 3px 0 var(--teal); }
+    94% { transform: skewX(5deg); text-shadow: 3px 0 var(--pink), -3px 0 var(--teal); }
+    96% { transform: none; }
   }
 
   .loading-sub {
-    color: #333;
-    font-size: 0.9rem;
+    color: var(--dimgreen);
+    font-size: 0.7rem;
     margin-bottom: 2rem;
-    letter-spacing: 2px;
-    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
     position: relative;
     z-index: 10;
   }
 
   .loading-bar-wrap {
     width: 340px;
-    height: 20px;
-    background: #fff;
-    border: 3px solid #000;
-    box-shadow: 4px 4px 0 #000;
+    height: 4px;
+    background: rgba(0,255,65,0.1);
     margin-bottom: 1rem;
-    overflow: hidden;
     position: relative;
     z-index: 10;
+    overflow: hidden;
   }
 
   .loading-bar {
     height: 100%;
     width: 0%;
-    background: repeating-linear-gradient(
-      45deg,
-      var(--yellow) 0px,
-      var(--yellow) 10px,
-      var(--black) 10px,
-      var(--black) 20px
-    );
+    background: linear-gradient(90deg, var(--dimgreen), var(--green), var(--teal));
     transition: width 0.5s ease;
+    box-shadow: 0 0 10px var(--green);
   }
 
-  .sky-stage  { position:absolute; top:0; left:0; right:0; bottom:160px; z-index:4; overflow:hidden; }
-  .walk-stage { position:absolute; bottom:0; left:0; right:0; height:160px; z-index:5; overflow:hidden; }
+  .loading-pct {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    color: var(--dimgreen);
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 10;
+  }
+
+  .sky-stage  { position:absolute; top:0; left:0; right:0; bottom:140px; z-index:4; overflow:hidden; }
+  .walk-stage { position:absolute; bottom:0; left:0; right:0; height:140px; z-index:5; overflow:hidden; }
 
   .ground-strip {
     position: absolute;
     bottom: 0; left: 0; right: 0;
-    height: 44px;
-    background: repeating-linear-gradient(
-      90deg, #000 0px, #000 30px, #fff 30px, #fff 60px
-    );
-    border-top: 4px solid #000;
+    height: 40px;
+    background: linear-gradient(to top, rgba(0,255,65,0.08), transparent);
+    border-top: 1px solid var(--border);
     z-index: 3;
   }
 
-  .anim-alien { position:absolute; bottom:36px; will-change:transform; }
+  .anim-alien { position:absolute; bottom:30px; will-change:transform; }
   .anim-ufo   { position:absolute; will-change:transform; }
 
   @keyframes walkRight { 0% { transform:translateX(-220px); } 100% { transform:translateX(calc(100vw + 220px)); } }
@@ -448,28 +583,28 @@
     100% { transform:translateX(-260px) translateY(-5px); }
   }
 
-  /* ── SPEECH BUBBLE ── */
+  /* speech bubble retro terminal style */
   .speech-bubble {
     position: absolute;
-    background: #fff;
-    border: 3px solid #000;
+    background: rgba(0,10,0,0.9);
+    border: 1px solid var(--green);
     padding: 4px 10px;
-    font-family: 'Bangers', cursive;
-    font-size: 0.9rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
     letter-spacing: 1px;
-    color: #000;
+    color: var(--green);
     white-space: nowrap;
     z-index: 20;
-    box-shadow: 2px 2px 0 #000;
+    box-shadow: 0 0 10px rgba(0,255,65,0.3);
     pointer-events: none;
   }
 
   .speech-bubble::after {
     content: '';
     position: absolute;
-    bottom: -9px; left: 12px;
-    border: 5px solid transparent;
-    border-top-color: #000;
+    bottom: -6px; left: 10px;
+    border: 4px solid transparent;
+    border-top-color: var(--green);
   }
 
   /* ── RESULT ── */
@@ -478,41 +613,40 @@
 
   .result-img {
     width: 100%; max-width: 500px;
-    border: 5px solid #000;
-    box-shadow: 8px 8px 0 #000;
-    animation: popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+    border: 1px solid var(--green);
+    box-shadow: 0 0 60px rgba(0,255,65,0.3);
+    animation: fadeUp 0.8s ease-out;
   }
 
-  @keyframes popIn {
-    0%   { transform:scale(0.5) rotate(-5deg); opacity:0; }
-    100% { transform:scale(1) rotate(0deg); opacity:1; }
+  @keyframes fadeUp {
+    0%   { transform:translateY(30px); opacity:0; }
+    100% { transform:translateY(0); opacity:1; }
   }
 
-  .result-actions {
-    display: flex; gap:1rem; justify-content:center;
-    margin-top:1.5rem; flex-wrap:wrap;
-  }
+  .result-actions { display:flex; gap:1rem; justify-content:center; margin-top:1.5rem; flex-wrap:wrap; }
 
   .action-btn {
-    padding: 0.7rem 1.5rem;
-    font-family: 'Bangers', cursive;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
+    padding: 0.65rem 1.5rem;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
     cursor: none;
-    border: 3px solid #000;
-    box-shadow: 4px 4px 0 #000;
+    border: 1px solid;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    transition: transform 0.15s, box-shadow 0.15s;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    background: transparent;
   }
 
-  .action-btn:hover { transform:translate(-2px,-2px); box-shadow:6px 6px 0 #000; }
-
-  .btn-download { background:var(--teal);   color:#000; }
-  .btn-gallery  { background:var(--purple); color:#fff; }
-  .btn-again    { background:var(--orange); color:#fff; }
+  .btn-download { border-color:var(--teal);   color:var(--teal); }
+  .btn-download:hover { background:var(--teal); color:#000; box-shadow:0 0 20px rgba(0,255,204,0.4); }
+  .btn-gallery  { border-color:var(--purple); color:var(--purple); }
+  .btn-gallery:hover { background:var(--purple); color:#fff; box-shadow:0 0 20px rgba(155,0,255,0.4); }
+  .btn-again    { border-color:var(--orange); color:var(--orange); }
+  .btn-again:hover { background:var(--orange); color:#fff; box-shadow:0 0 20px rgba(255,107,0,0.4); }
 
   /* ── GALLERY ── */
   .gallery-grid {
@@ -524,196 +658,221 @@
   }
 
   .gallery-card {
-    border: 4px solid #000;
-    box-shadow: 5px 5px 0 #000;
+    border: 1px solid var(--border);
     overflow: hidden;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.3s, box-shadow 0.3s;
     cursor: none;
-    background: #fff;
+    background: var(--card);
+    position: relative;
   }
 
-  .gallery-card:hover { transform:translate(-4px,-4px) rotate(1deg); box-shadow:9px 9px 0 var(--yellow); }
-  .gallery-card img { width:100%; aspect-ratio:1; object-fit:cover; display:block; }
-  .gallery-card-info { padding:0.5rem 0.75rem; font-family:'Bangers',cursive; font-size:1rem; letter-spacing:1px; color:#000; background:var(--yellow); border-top:3px solid #000; }
+  .gallery-card::before {
+    content: '';
+    position: absolute;
+    top:4px; left:4px;
+    border-top: 1px solid var(--green);
+    border-left: 1px solid var(--green);
+    width: 12px; height: 12px;
+    z-index: 2;
+  }
 
-  .gallery-empty { text-align:center; color:#aaa; padding:4rem; font-family:'Bangers',cursive; font-size:1.5rem; letter-spacing:2px; grid-column:1/-1; }
+  .gallery-card:hover { transform:translateY(-6px); box-shadow:0 20px 60px rgba(0,255,65,0.15); border-color:var(--green); }
+  .gallery-card img { width:100%; aspect-ratio:1; object-fit:cover; display:block; }
+  .gallery-card-info { padding:0.5rem 0.75rem; font-family:'Orbitron',monospace; font-size:0.6rem; letter-spacing:2px; color:var(--dimgreen); background:rgba(0,10,0,0.8); border-top:1px solid var(--border); }
+
+  .gallery-empty { text-align:center; color:var(--dimgreen); padding:4rem; font-family:'Orbitron',monospace; font-size:0.8rem; letter-spacing:4px; grid-column:1/-1; }
 
   /* ── INFO CARDS ── */
   .info-card {
-    background: #fff;
-    border: 4px solid #000;
-    box-shadow: 8px 8px 0 var(--purple);
+    background: var(--card);
+    border: 1px solid var(--border);
     padding: 3rem;
     text-align: center;
     max-width: 700px;
     margin: 0 auto;
     position: relative;
+    box-shadow: 0 0 40px rgba(0,255,65,0.05);
   }
 
-  .info-card::before {
+  .info-card::before, .info-card::after {
     content: '';
     position: absolute;
-    inset: 8px;
-    border: 2px solid #000;
-    pointer-events: none;
+    width: 20px; height: 20px;
+    border-color: var(--green);
+    border-style: solid;
   }
 
-  .info-card h3 {
-    font-family: 'Bangers', cursive;
-    font-size: 2rem;
-    letter-spacing: 3px;
-    color: #000;
-    margin-bottom: 1rem;
-  }
+  .info-card::before { top:8px; left:8px; border-width:1px 0 0 1px; }
+  .info-card::after  { bottom:8px; right:8px; border-width:0 1px 1px 0; }
 
-  .info-card p { color:#333; line-height:1.8; margin-bottom:2rem; }
+  .info-card h3 { font-family:'Orbitron',monospace; font-size:1.1rem; letter-spacing:4px; color:var(--yellow); margin-bottom:1rem; text-shadow:0 0 15px var(--yellow); }
+  .info-card p  { color:rgba(0,255,65,0.6); line-height:1.9; margin-bottom:2rem; font-size:0.85rem; letter-spacing:1px; }
 
   .cta-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.9rem 2.5rem;
-    border: 4px solid #000;
-    font-family: 'Bangers', cursive;
-    font-size: 1.3rem;
-    letter-spacing: 3px;
+    padding: 0.85rem 2.5rem;
+    border: 1px solid;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 4px;
     cursor: none;
     text-decoration: none;
-    box-shadow: 6px 6px 0 #000;
-    transition: transform 0.15s, box-shadow 0.15s;
+    text-transform: uppercase;
+    background: transparent;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
   }
 
-  .cta-btn:hover { transform:translate(-3px,-3px); box-shadow:9px 9px 0 #000; }
-  .btn-commission { background:var(--red);    color:#fff; }
-  .btn-donate     { background:var(--purple); color:#fff; }
+  .cta-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+    z-index: -1;
+  }
+
+  .cta-btn:hover::before { transform: scaleX(1); }
+  .cta-btn:hover { color: #000; }
+
+  .btn-commission { border-color:var(--yellow); color:var(--yellow); box-shadow:0 0 20px rgba(255,215,0,0.15); }
+  .btn-commission::before { background: var(--yellow); }
+  .btn-commission:hover { box-shadow:0 0 40px rgba(255,215,0,0.4); }
+
+  .btn-donate { border-color:var(--purple); color:var(--purple); box-shadow:0 0 20px rgba(155,0,255,0.15); }
+  .btn-donate::before { background: var(--purple); }
+  .btn-donate:hover { color:#fff; box-shadow:0 0 40px rgba(155,0,255,0.4); }
 
   footer {
     position: relative; z-index:10;
-    text-align: center; padding:1.5rem;
-    border-top: 4px solid #000;
-    background: #000;
-    font-family: 'Bangers', cursive;
-    font-size: 1rem; letter-spacing:3px;
-    color: var(--yellow);
+    text-align: center; padding:2rem;
+    border-top: 1px solid var(--border);
+    font-family: 'Orbitron', monospace;
+    font-size: 0.6rem; letter-spacing:4px;
+    color: var(--dimgreen);
+    background: rgba(1,4,1,0.8);
   }
 
+  .error-msg { color:var(--red); font-size:0.8rem; margin-top:1rem; display:none; font-family:'Orbitron',monospace; letter-spacing:2px; }
 
-  .error-msg { color:var(--red); font-size:0.9rem; margin-top:1rem; display:none; font-family:'Bangers',cursive; letter-spacing:1px; }
-
-  /* action word bursts */
-  .burst-word {
-    position: absolute;
-    font-family: 'Bangers', cursive;
-    -webkit-text-stroke: 2px #000;
-    paint-order: stroke fill;
-    pointer-events: none;
-    z-index: 6;
-    animation: burstPop 0.5s cubic-bezier(0.175,0.885,0.32,1.275) forwards;
-  }
-
-  @keyframes burstPop {
-    0%   { transform: scale(0) rotate(-10deg); opacity:0; }
-    100% { transform: scale(1) rotate(var(--r)); opacity:1; }
+  /* divider line */
+  .divider {
+    width: 100%;
+    max-width: 400px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    margin: 0 auto 3rem;
+    opacity: 0.3;
   }
 </style>
 </head>
 <body>
 
 <div class="cursor" id="cursor"></div>
-
-<!-- B&W Comic book background -->
-<div class="comic-bg" id="comicBg"></div>
-<div class="page-overlay"></div>
+<div class="starfield"></div>
+<div class="fog"></div>
+<div class="paintings-bg"></div>
 
 <nav>
-  <div class="logo">★ STARLIT ★</div>
+  <div class="logo">STARLIT</div>
   <ul class="nav-links">
-    <li><a href="#alienfy">ALIENFY ME</a></li>
-    <li><a href="#gallery">GALLERY</a></li>
-    <li><a href="#commission">COMMISSION</a></li>
-    <li><a href="#donate">DONATE</a></li>
+    <li><a href="#alienfy">Alienfy Me</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#commission">Commission</a></li>
+    <li><a href="#donate">Donate</a></li>
   </ul>
 </nav>
 
 <section class="hero">
-  <p class="hero-tag">★ AI ART EXPERIENCE BY STARLIT ★</p>
-  <h1>
-    <span class="line1">ALIENFY</span>
-    <span class="line2">ME!</span>
-  </h1>
-  <p class="hero-sub">Upload your photo. Become an alien.<br>Painted in the original Starlit style.</p>
-  <a href="#alienfy" class="hero-cta">★ BEGIN TRANSFORMATION ★</a>
+  
+  <div class="hero-title-wrap">
+    
+    <span class="hero-main">ALIENFY ME</span>
+    <span class="hero-sub-title">become an original</span>
+  </div>
+  <div class="egg-glow"></div>
+  <p class="hero-tagline">"let's see what your alien soul looks like."</p>
+  <a href="#alienfy" class="hero-cta">▶ Begin Transformation</a>
 </section>
 
 <section id="alienfy">
-  <p class="section-label" style="color:var(--teal)">★ THE EXPERIENCE ★</p>
-  <h2 class="section-title t-yellow">ALIENFY ME</h2>
+  <p class="section-label">— Transmission Initiated —</p>
+  <h2 class="section-title t-green">ALIENFY ME</h2>
+  <div class="rule"><span>UPLOAD YOUR PHOTO</span></div>
 
   <div class="upload-zone" id="uploadZone">
     <span class="upload-icon">👽</span>
-    <p class="upload-text">DROP YOUR PHOTO HERE</p>
-    <p class="upload-sub">or click to browse — JPG, PNG, WEBP</p>
-    <button class="upload-btn" onclick="event.stopPropagation(); document.getElementById('fileInput').click()">CHOOSE PHOTO</button>
+    <p class="upload-text">Drop your photo here</p>
+    <p class="upload-sub">or click to browse &mdash; jpg / png / webp</p>
+    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">[ Choose File ]</button>
     <input type="file" id="fileInput" accept="image/*">
   </div>
 
   <div class="preview-section" id="previewSection">
     <img class="preview-img" id="previewImg" src="" alt="Your photo">
     <br>
-    <button class="transform-btn" onclick="startTransform()">★ ALIENFY ME! ★</button>
+    <button class="transform-btn" onclick="startTransform()">▶ ALIENFY ME</button>
     <p class="error-msg" id="errorMsg"></p>
   </div>
 
   <div class="result-section" id="resultSection">
     <img class="result-img" id="resultImg" src="" alt="Your alien self">
     <div class="result-actions">
-      <a class="action-btn btn-download" id="downloadBtn" href="#" download="my-alien-by-starlit.png">↓ DOWNLOAD</a>
-      <button class="action-btn btn-gallery" onclick="addToGallery()">+ GALLERY</button>
-      <button class="action-btn btn-again" onclick="resetForm()">TRY AGAIN</button>
+      <a class="action-btn btn-download" id="downloadBtn" href="#" download="my-alien-by-starlit.png">↓ Download</a>
+      <button class="action-btn btn-gallery" onclick="addToGallery()">+ Gallery</button>
+      <button class="action-btn btn-again" onclick="resetForm()">↺ Try Again</button>
     </div>
   </div>
 </section>
 
 <!-- Loading Screen -->
 <div class="loading-screen" id="loadingScreen">
-  <p class="loading-title" id="loadingTitle">TRANSMITTING TO COSMOS!</p>
-  <p class="loading-sub">painting your alien soul... hang tight earthling</p>
+  <p class="loading-title" id="loadingTitle">TRANSMITTING TO COSMOS</p>
+  <p class="loading-sub" id="loadingSub">painting your alien soul...</p>
   <div class="loading-bar-wrap">
     <div class="loading-bar" id="loadingBar"></div>
   </div>
+  <p class="loading-pct" id="loadingPct">0%</p>
   <div class="sky-stage"  id="skyStage"></div>
   <div class="walk-stage" id="walkStage"></div>
   <div class="ground-strip"></div>
 </div>
 
 <section id="gallery">
-  <p class="section-label" style="color:var(--pink)">★ THE COLLECTIVE ★</p>
+  <p class="section-label">— The Collective —</p>
   <h2 class="section-title t-pink">ALIEN GALLERY</h2>
+  <div class="divider"></div>
   <div class="gallery-grid" id="galleryGrid">
-    <div class="gallery-empty" id="galleryEmpty">NO ALIENS YET. BE THE FIRST! 👽</div>
+    <div class="gallery-empty" id="galleryEmpty">// NO TRANSMISSIONS RECEIVED YET //</div>
   </div>
 </section>
 
 <section id="commission">
-  <p class="section-label" style="color:var(--purple)">★ THE REAL THING ★</p>
-  <h2 class="section-title t-purple">COMMISSION A PAINTING</h2>
+  <p class="section-label">— Original Works —</p>
+  <h2 class="section-title t-yellow">COMMISSION A PAINTING</h2>
+  <div class="divider"></div>
   <div class="info-card">
     <h3>WANT A REAL STARLIT ORIGINAL?</h3>
-    <p>Starlit is available for custom alien portrait commissions — hand painted in acrylic on canvas. Send your photo and get a one of a kind piece of alien art. Each painting is unique, signed, and ready to hang in your universe.</p>
-    <a href="mailto:starlit@alienfy.me" class="cta-btn btn-commission">★ REQUEST A COMMISSION ★</a>
+    <p>Starlit is available for custom alien portrait commissions — hand painted in acrylic on canvas. Send your photo and receive a one of a kind piece of alien art. Each painting is unique, signed, and ready to hang in your universe.</p>
+    <a href="mailto:starlit@alienfy.me" class="cta-btn btn-commission">▶ Request a Commission</a>
   </div>
 </section>
 
 <section id="donate">
-  <p class="section-label" style="color:var(--teal)">★ SUPPORT THE ARTIST ★</p>
+  <p class="section-label">— Support the Signal —</p>
   <h2 class="section-title t-teal">FUEL THE ART</h2>
+  <div class="divider"></div>
   <div class="info-card">
     <p>This experience is free because art should be for everyone. If your alien made you smile, consider supporting Starlit to keep creating weird and wonderful things across the universe.</p>
-    <a href="https://www.paypal.com/donate" target="_blank" class="cta-btn btn-donate">★ SEND A LITTLE LOVE ★</a>
+    <a href="https://www.paypal.com/donate" target="_blank" class="cta-btn btn-donate">▶ Send a Little Love</a>
   </div>
 </section>
 
-<footer>© 2025 STARLIT · ALIENFY ME · ALL BEINGS WELCOME ★</footer>
+<footer>© 2025 STARLIT · ALIENFY ME · ALL BEINGS WELCOME · TRANSMISSION ENDS</footer>
 
 <script>
 /* cursor */
@@ -723,36 +882,13 @@ document.addEventListener('mousemove', e => {
   cursor.style.top  = e.clientY + 'px';
 });
 
-/* ── COMIC BG PANELS ── */
-const paintings = [
-  '20241102_110223 (1).jpg',
-  '20241214_093327.jpg',
-  '20250614_145600 (1).jpg',
-  '20251019_094050.jpg',
-  '20251027_111520.jpg',
-  '20251116_133447.jpg',
-  '20251128_103626.jpg',
-  'PhotoShot_1737852861270.jpeg',
-  'PhotoShot_1748396169262.jpeg',
-  'PhotoShot_1759690898402.jpeg',
-];
-
-const BASE = 'https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/main/paintings/';
-
-
-
-/* scatter burst words */
-const burstWords = ['POW!','ZAP!','WOW!','BAM!','YES!','WILD!','ALIEN!','NO WAY!','COSMIC!','WOAH!'];
-const burstColors = ['#FF1F1F','#FFE000','#0055FF','#FF00CC','#9B00FF','#FF6B00'];
-
-
 /* ── SVG CHARACTERS ── */
 function svgAlienEating(skinColor, foodEmoji, size) {
   const w = size, h = size * 1.95;
-  return `<svg width="${w}" height="${h}" viewBox="0 0 90 175" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">
-    <ellipse cx="45" cy="170" rx="22" ry="5" fill="rgba(0,0,0,0.3)"/>
-    <rect x="30" y="120" width="12" height="38" rx="6" fill="${skinColor}" stroke="#000" stroke-width="2.5"/>
-    <rect x="48" y="120" width="12" height="38" rx="6" fill="${skinColor}" stroke="#000" stroke-width="2.5"/>
+  return `<svg width="${w}" height="${h}" viewBox="0 0 90 175" xmlns="http://www.w3.org/2000/svg" style="overflow:visible;filter:drop-shadow(0 0 8px ${skinColor})">
+    <ellipse cx="45" cy="170" rx="22" ry="5" fill="rgba(0,0,0,0.5)"/>
+    <rect x="30" y="120" width="12" height="38" rx="6" fill="${skinColor}" stroke="#000" stroke-width="2"/>
+    <rect x="48" y="120" width="12" height="38" rx="6" fill="${skinColor}" stroke="#000" stroke-width="2"/>
     <ellipse cx="36" cy="158" rx="12" ry="6" fill="${skinColor}" stroke="#000" stroke-width="2"/>
     <ellipse cx="54" cy="158" rx="12" ry="6" fill="${skinColor}" stroke="#000" stroke-width="2"/>
     <circle cx="27" cy="160" r="3.5" fill="${skinColor}" stroke="#000" stroke-width="1.5"/>
@@ -762,9 +898,6 @@ function svgAlienEating(skinColor, foodEmoji, size) {
     <circle cx="51" cy="162" r="3.5" fill="${skinColor}" stroke="#000" stroke-width="1.5"/>
     <circle cx="57" cy="162" r="3.5" fill="${skinColor}" stroke="#000" stroke-width="1.5"/>
     <rect x="25" y="84" width="40" height="42" rx="13" fill="${skinColor}" stroke="#000" stroke-width="2.5"/>
-    <line x1="34" y1="92" x2="34" y2="114" stroke="rgba(0,0,0,0.12)" stroke-width="2" stroke-linecap="round"/>
-    <line x1="41" y1="90" x2="41" y2="117" stroke="rgba(0,0,0,0.12)" stroke-width="2" stroke-linecap="round"/>
-    <line x1="48" y1="92" x2="48" y2="114" stroke="rgba(0,0,0,0.12)" stroke-width="2" stroke-linecap="round"/>
     <path d="M25 94 Q8 82 6 66" stroke="${skinColor}" stroke-width="11" fill="none" stroke-linecap="round"/>
     <path d="M25 94 Q8 82 6 66" stroke="#000" stroke-width="14" fill="none" stroke-linecap="round" paint-order="stroke"/>
     <path d="M25 94 Q8 82 6 66" stroke="${skinColor}" stroke-width="11" fill="none" stroke-linecap="round"/>
@@ -777,7 +910,7 @@ function svgAlienEating(skinColor, foodEmoji, size) {
     <text x="80" y="68" font-size="24" text-anchor="middle">${foodEmoji}</text>
     <rect x="38" y="74" width="14" height="14" rx="5" fill="${skinColor}" stroke="#000" stroke-width="2"/>
     <circle cx="45" cy="44" r="36" fill="${skinColor}" stroke="#000" stroke-width="3"/>
-    <ellipse cx="32" cy="26" rx="11" ry="7" fill="rgba(255,255,255,0.22)" transform="rotate(-20,32,26)"/>
+    <ellipse cx="32" cy="26" rx="11" ry="7" fill="rgba(255,255,255,0.2)" transform="rotate(-20,32,26)"/>
     <line x1="46" y1="10" x2="54" y2="-10" stroke="#000" stroke-width="3.5" stroke-linecap="round"/>
     <circle cx="55" cy="-14" r="7" fill="${skinColor}" stroke="#000" stroke-width="2.5"/>
     <circle cx="55" cy="-14" r="3.5" fill="rgba(255,255,255,0.7)"/>
@@ -796,37 +929,36 @@ function svgAlienEating(skinColor, foodEmoji, size) {
 }
 
 function svgUFO(bodyColor, lightColor) {
-  return `<svg width="210" height="110" viewBox="0 0 210 110" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">
-    <ellipse cx="105" cy="104" rx="90" ry="9" fill="rgba(0,0,0,0.25)"/>
-    <ellipse cx="105" cy="72" rx="92" ry="26" fill="${bodyColor}" stroke="#000" stroke-width="3.5"/>
-    <ellipse cx="105" cy="72" rx="92" ry="26" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
-    <circle cx="28"  cy="75" r="8" fill="${lightColor}" stroke="#000" stroke-width="2.5"/>
-    <circle cx="58"  cy="82" r="8" fill="${lightColor}" stroke="#000" stroke-width="2.5" opacity="0.85"/>
-    <circle cx="88"  cy="85" r="8" fill="${lightColor}" stroke="#000" stroke-width="2.5"/>
-    <circle cx="122" cy="85" r="8" fill="${lightColor}" stroke="#000" stroke-width="2.5" opacity="0.85"/>
-    <circle cx="152" cy="82" r="8" fill="${lightColor}" stroke="#000" stroke-width="2.5"/>
-    <circle cx="182" cy="75" r="8" fill="${lightColor}" stroke="#000" stroke-width="2.5" opacity="0.85"/>
-    <ellipse cx="105" cy="56" rx="56" ry="40" fill="${bodyColor}" stroke="#000" stroke-width="3"/>
-    <ellipse cx="105" cy="48" rx="40" ry="28" fill="rgba(120,210,255,0.22)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
-    <ellipse cx="88"  cy="35" rx="15" ry="9" fill="rgba(255,255,255,0.28)" transform="rotate(-22,88,35)"/>
-    <circle cx="96"  cy="48" r="6" fill="rgba(0,0,0,0.75)"/>
-    <circle cx="114" cy="48" r="6" fill="rgba(0,0,0,0.75)"/>
-    <circle cx="94"  cy="45" r="2.5" fill="white"/>
-    <circle cx="112" cy="45" r="2.5" fill="white"/>
-    <polygon points="76,90 134,90 158,110 52,110" fill="rgba(255,255,120,0.12)" stroke="rgba(255,255,100,0.35)" stroke-width="1"/>
-    <line x1="105" y1="90" x2="105" y2="110" stroke="rgba(255,255,100,0.45)" stroke-width="2" stroke-dasharray="5,4"/>
-    <text x="105" y="108" font-size="16" text-anchor="middle">🐄</text>
+  return `<svg width="200" height="100" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" style="overflow:visible;filter:drop-shadow(0 0 12px ${lightColor})">
+    <ellipse cx="100" cy="98" rx="88" ry="7" fill="rgba(0,0,0,0.3)"/>
+    <ellipse cx="100" cy="68" rx="90" ry="22" fill="${bodyColor}" stroke="#000" stroke-width="2.5"/>
+    <circle cx="28"  cy="71" r="7" fill="${lightColor}" stroke="#000" stroke-width="2"/>
+    <circle cx="55"  cy="77" r="7" fill="${lightColor}" stroke="#000" stroke-width="2" opacity="0.85"/>
+    <circle cx="82"  cy="80" r="7" fill="${lightColor}" stroke="#000" stroke-width="2"/>
+    <circle cx="118" cy="80" r="7" fill="${lightColor}" stroke="#000" stroke-width="2" opacity="0.85"/>
+    <circle cx="145" cy="77" r="7" fill="${lightColor}" stroke="#000" stroke-width="2"/>
+    <circle cx="172" cy="71" r="7" fill="${lightColor}" stroke="#000" stroke-width="2" opacity="0.85"/>
+    <ellipse cx="100" cy="52" rx="54" ry="38" fill="${bodyColor}" stroke="#000" stroke-width="2.5"/>
+    <ellipse cx="100" cy="46" rx="38" ry="26" fill="rgba(120,220,255,0.2)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+    <ellipse cx="86"  cy="34" rx="14" ry="9" fill="rgba(255,255,255,0.25)" transform="rotate(-22,86,34)"/>
+    <circle cx="94"  cy="46" r="6" fill="rgba(0,0,0,0.75)"/>
+    <circle cx="112" cy="46" r="6" fill="rgba(0,0,0,0.75)"/>
+    <circle cx="92"  cy="43" r="2.5" fill="white"/>
+    <circle cx="110" cy="43" r="2.5" fill="white"/>
+    <polygon points="74,86 126,86 148,100 52,100" fill="rgba(255,255,120,0.08)" stroke="rgba(255,255,100,0.3)" stroke-width="1"/>
+    <line x1="100" y1="86" x2="100" y2="100" stroke="rgba(255,255,100,0.4)" stroke-width="2" stroke-dasharray="5,4"/>
+    <text x="100" y="100" font-size="14" text-anchor="middle">🐄</text>
   </svg>`;
 }
 
-const alienColors = ['#C084FC','#34D399','#F472B6','#FCD34D','#67E8F9','#A3E635','#FB923C','#60A5FA'];
+const alienColors = ['#00FF41','#C084FC','#34D399','#F472B6','#FCD34D','#67E8F9','#A3E635','#FB923C'];
 const foods       = ['🍕','🍔','🍟','🌮','🍩','🌭','🍦','🍿'];
 const ufoTypes    = [
-  {body:'#6D28D9',light:'#FFE000'},
-  {body:'#0F766E',light:'#FF1F1F'},
-  {body:'#9D174D',light:'#00FFCC'},
-  {body:'#1D4ED8',light:'#FF6B00'},
-  {body:'#7C2D12',light:'#A3E635'},
+  {body:'#0D3D0D',light:'#00FF41'},
+  {body:'#1a0a3d',light:'#9B00FF'},
+  {body:'#1D4ED8',light:'#00FFCC'},
+  {body:'#3D0D1A',light:'#FF00CC'},
+  {body:'#1a1a00',light:'#FFD700'},
 ];
 
 let loadingTimers = [];
@@ -844,10 +976,10 @@ function spawnAlien() {
   const walk  = document.getElementById('walkStage');
   const color = alienColors[Math.floor(Math.random() * alienColors.length)];
   const food  = foods[Math.floor(Math.random() * foods.length)];
-  const size  = 52 + Math.random() * 38;
+  const size  = 50 + Math.random() * 36;
   const dur   = 7 + Math.random() * 9;
   const dir   = Math.random() > 0.5 ? 'right' : 'left';
-  const bot   = Math.random() * 18;
+  const bot   = Math.random() * 16;
 
   const el = document.createElement('div');
   el.className = 'anim-alien';
@@ -855,7 +987,7 @@ function spawnAlien() {
   el.innerHTML = svgAlienEating(color, food, size);
   el.style.animation = `${dir === 'right' ? 'walkRight' : 'walkLeft'} ${dur}s linear forwards`;
 
-  const msgs = ['NOM NOM!','SO TASTY!','EARTHLING FOOD!','DELICIOUS!','YUM YUM!','GIMME MORE!','AMAZING!'];
+  const msgs = ['> NOM_NOM.exe','> EARTHLING_FOOD++','> DELICIOUS=TRUE','> MORE_PIZZA.sys','> YUM_PROTOCOL','> CONSUMING...'];
   const bubble = document.createElement('div');
   bubble.className = 'speech-bubble';
   bubble.textContent = msgs[Math.floor(Math.random() * msgs.length)];
@@ -868,35 +1000,15 @@ function spawnAlien() {
 
   walk.appendChild(el);
   walk.appendChild(bubble);
-
   const t = setTimeout(() => { el.remove(); bubble.remove(); }, dur * 1000 + 500);
   loadingTimers.push(t);
-
-  /* random action burst word */
-  if (Math.random() > 0.6) {
-    const bWords = ['POW!','ZAP!','NOM!','WOW!','BAM!','YUM!'];
-    const bColors = ['#FF1F1F','#FFE000','#0055FF','#FF6B00'];
-    const bw = document.createElement('div');
-    bw.className = 'burst-word';
-    bw.textContent = bWords[Math.floor(Math.random() * bWords.length)];
-    bw.style.cssText = `
-      color:${bColors[Math.floor(Math.random() * bColors.length)]};
-      font-size:${1.5 + Math.random() * 2}rem;
-      bottom:${size * 1.5 + bot + 40 + Math.random() * 40}px;
-      left:${20 + Math.random() * 60}vw;
-      --r: ${-15 + Math.random() * 30}deg;
-    `;
-    walk.appendChild(bw);
-    const t2 = setTimeout(() => bw.remove(), dur * 1000 + 500);
-    loadingTimers.push(t2);
-  }
 }
 
 function spawnUFO() {
   const sky = document.getElementById('skyStage');
   const t   = ufoTypes[Math.floor(Math.random() * ufoTypes.length)];
   const dur = 13 + Math.random() * 9;
-  const top = 8 + Math.random() * 52;
+  const top = 8 + Math.random() * 55;
 
   const el = document.createElement('div');
   el.className = 'anim-ufo';
@@ -911,40 +1023,45 @@ function spawnUFO() {
 
 /* loading bar */
 let barInterval = null;
+let barPct = 0;
 
 function startLoadingBar() {
+  barPct = 0;
   document.getElementById('loadingBar').style.width = '0%';
-  let pct = 0;
+  document.getElementById('loadingPct').textContent = '0%';
   barInterval = setInterval(() => {
-    const step = pct < 40 ? 2.5 : pct < 70 ? 1.2 : pct < 88 ? 0.4 : 0.1;
-    pct = Math.min(pct + step, 92);
-    document.getElementById('loadingBar').style.width = pct + '%';
+    const step = barPct < 40 ? 2.5 : barPct < 70 ? 1.2 : barPct < 88 ? 0.4 : 0.1;
+    barPct = Math.min(barPct + step, 92);
+    document.getElementById('loadingBar').style.width = barPct + '%';
+    document.getElementById('loadingPct').textContent = Math.floor(barPct) + '%';
   }, 500);
 }
 
 function finishLoadingBar() {
   if (barInterval) clearInterval(barInterval);
   document.getElementById('loadingBar').style.width = '100%';
+  document.getElementById('loadingPct').textContent = '100%';
 }
 
 /* rotating loading messages */
 const loadMsgs = [
-  'TRANSMITTING TO COSMOS!',
-  'PAINTING YOUR SOUL!',
-  'ABDUCTING YOUR FACE!',
-  'CONSULTING THE ALIENS!',
-  'MIXING COSMIC PAINT!',
-  'ACTIVATING RAY GUN!',
+  ['TRANSMITTING TO COSMOS','scanning your earthling face...'],
+  ['PAINTING YOUR SOUL','mixing cosmic pigments...'],
+  ['ABDUCTING YOUR LIKENESS','probe initialized...'],
+  ['CONSULTING THE ELDERS','establishing alien contact...'],
+  ['ACTIVATING RAY GUN','target locked on your face...'],
+  ['GENERATING ALIEN DNA','recoding your genome...'],
 ];
 let msgInterval = null;
+let msgIdx = 0;
 
 function startLoadingMessages() {
-  let idx = 0;
-  const el = document.getElementById('loadingTitle');
+  msgIdx = 0;
   msgInterval = setInterval(() => {
-    idx = (idx + 1) % loadMsgs.length;
-    el.textContent = loadMsgs[idx];
-  }, 2000);
+    msgIdx = (msgIdx + 1) % loadMsgs.length;
+    document.getElementById('loadingTitle').textContent = loadMsgs[msgIdx][0];
+    document.getElementById('loadingSub').textContent   = loadMsgs[msgIdx][1];
+  }, 2500);
 }
 
 function stopLoadingMessages() {
@@ -962,8 +1079,8 @@ function startLoadingScene() {
 }
 
 /* file upload */
-const fileInput  = document.getElementById('fileInput');
-const uploadZone = document.getElementById('uploadZone');
+const fileInput   = document.getElementById('fileInput');
+const uploadZone  = document.getElementById('uploadZone');
 const previewSect = document.getElementById('previewSection');
 let currentImageData = null;
 
@@ -974,14 +1091,11 @@ uploadZone.addEventListener('drop', e => {
   uploadZone.classList.remove('dragover');
   if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
 });
-uploadZone.addEventListener('click', (e) => { 
-  if (e.target !== fileInput) fileInput.click(); 
+uploadZone.addEventListener('click', (e) => {
+  if (e.target !== fileInput) fileInput.click();
 });
-
-fileInput.addEventListener('change', function() { 
-  if (this.files && this.files[0]) {
-    handleFile(this.files[0]);
-  }
+fileInput.addEventListener('change', function() {
+  if (this.files && this.files[0]) handleFile(this.files[0]);
 });
 
 function handleFile(file) {
@@ -1044,7 +1158,7 @@ async function startTransform() {
     stopLoadingMessages();
     clearLoadingScene();
     document.getElementById('loadingScreen').classList.remove('active');
-    document.getElementById('errorMsg').textContent = 'Something went wrong: ' + err.message;
+    document.getElementById('errorMsg').textContent = '// ERROR: ' + err.message;
     document.getElementById('errorMsg').style.display = 'block';
     previewSect.style.display = 'block';
     console.error(err);
@@ -1063,7 +1177,7 @@ function renderGallery() {
   gallery.slice().reverse().forEach((item, i) => {
     const card = document.createElement('div');
     card.className = 'gallery-card';
-    card.innerHTML = `<img src="${item.url}" alt="Alien ${i+1}" loading="lazy"><div class="gallery-card-info">★ ${item.date}</div>`;
+    card.innerHTML = `<img src="${item.url}" alt="Alien ${i+1}" loading="lazy"><div class="gallery-card-info">// ${item.date}</div>`;
     grid.appendChild(card);
   });
 }
