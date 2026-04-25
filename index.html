@@ -478,7 +478,7 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: #010401;
+    background: #000;
     z-index: 1000;
     flex-direction: column;
     align-items: center;
@@ -486,58 +486,156 @@
     overflow: hidden;
   }
 
-  .loading-screen::before {
-    content: '';
+  .loading-screen.active { display: flex; }
+
+  /* deep space background */
+  .ls-overlay {
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 50%, rgba(0,40,0,0.6) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 30%, rgba(0,20,0,0.4) 0%, transparent 40%),
+      radial-gradient(ellipse at 50% 80%, rgba(0,60,0,0.3) 0%, transparent 40%),
+      #000;
+    z-index: 0;
+  }
+
+  /* grid floor like alien ship */
+  .ls-grid {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 45%;
+    background-image: 
+      linear-gradient(rgba(0,255,65,0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,65,0.1) 1px, transparent 1px);
+    background-size: 60px 60px;
+    transform: perspective(400px) rotateX(60deg);
+    transform-origin: bottom;
+    z-index: 1;
+  }
+
+  /* fog layers */
+  .ls-fog1 {
+    position: absolute;
+    bottom: 30%; left: -20%;
+    width: 140%; height: 200px;
+    background: radial-gradient(ellipse, rgba(0,255,65,0.08) 0%, transparent 70%);
+    filter: blur(20px);
+    animation: fogMove 8s ease-in-out infinite alternate;
+    z-index: 2;
+  }
+
+  .ls-fog2 {
+    position: absolute;
+    bottom: 25%; left: 10%;
+    width: 80%; height: 150px;
+    background: radial-gradient(ellipse, rgba(0,180,50,0.06) 0%, transparent 70%);
+    filter: blur(30px);
+    animation: fogMove 12s ease-in-out infinite alternate-reverse;
+    z-index: 2;
+  }
+
+  @keyframes fogMove {
+    0%   { transform: translateX(-30px) scaleX(1); }
+    100% { transform: translateX(30px) scaleX(1.1); }
+  }
+
+  /* scanline effect */
+  .ls-scanline {
     position: absolute;
     inset: 0;
     background: repeating-linear-gradient(
       0deg, transparent, transparent 2px,
-      rgba(0,0,0,0.2) 2px, rgba(0,0,0,0.2) 4px
+      rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px
     );
-    z-index: 0;
+    z-index: 8;
+    pointer-events: none;
+    animation: scanDown 8s linear infinite;
+  }
+
+  @keyframes scanDown {
+    0%   { background-position: 0 0; }
+    100% { background-position: 0 100px; }
+  }
+
+  /* the egg */
+  .ls-egg {
+    position: absolute;
+    bottom: 38%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    animation: eggPulse 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px rgba(0,255,65,0.4)) drop-shadow(0 0 60px rgba(0,255,65,0.2));
+  }
+
+  @keyframes eggPulse {
+    0%,100% { filter: drop-shadow(0 0 20px rgba(0,255,65,0.3)) drop-shadow(0 0 40px rgba(0,255,65,0.15)); }
+    50%      { filter: drop-shadow(0 0 40px rgba(0,255,65,0.6)) drop-shadow(0 0 80px rgba(0,255,65,0.3)); }
+  }
+
+  /* stars */
+  .ls-stars {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
     pointer-events: none;
   }
 
-  .loading-screen.active { display: flex; }
+  /* content */
+  .ls-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    margin-top: -60px;
+  }
+
+  .ls-warning {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 6px;
+    color: var(--red);
+    margin-bottom: 0.5rem;
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    0%,100% { opacity: 1; }
+    50%      { opacity: 0.2; }
+  }
 
   .loading-title {
     font-family: 'Orbitron', monospace;
-    font-size: clamp(1rem, 3vw, 2rem);
+    font-size: clamp(0.9rem, 2.5vw, 1.8rem);
     font-weight: 900;
     color: var(--green);
     letter-spacing: 6px;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
     text-transform: uppercase;
     text-shadow: 0 0 20px var(--green);
-    animation: glitch 3s infinite;
-    position: relative;
-    z-index: 10;
+    animation: glitch 4s infinite;
   }
 
   @keyframes glitch {
-    0%,90%,100% { transform: none; text-shadow: 0 0 20px var(--green); }
-    92% { transform: skewX(-5deg); text-shadow: -3px 0 var(--pink), 3px 0 var(--teal); }
-    94% { transform: skewX(5deg); text-shadow: 3px 0 var(--pink), -3px 0 var(--teal); }
-    96% { transform: none; }
+    0%,88%,100% { transform:none; text-shadow:0 0 20px var(--green); }
+    90% { transform:skewX(-4deg); text-shadow:-3px 0 var(--pink),3px 0 var(--teal); }
+    92% { transform:skewX(4deg); text-shadow:3px 0 var(--pink),-3px 0 var(--teal); }
+    94% { transform:none; }
   }
 
   .loading-sub {
     color: var(--dimgreen);
-    font-size: 0.7rem;
-    margin-bottom: 2rem;
+    font-size: 0.65rem;
+    margin-bottom: 1.5rem;
     letter-spacing: 4px;
     text-transform: uppercase;
-    position: relative;
-    z-index: 10;
   }
 
   .loading-bar-wrap {
     width: 340px;
-    height: 4px;
+    height: 3px;
     background: rgba(0,255,65,0.1);
-    margin-bottom: 1rem;
-    position: relative;
-    z-index: 10;
+    margin: 0 auto 0.5rem;
     overflow: hidden;
   }
 
@@ -546,65 +644,39 @@
     width: 0%;
     background: linear-gradient(90deg, var(--dimgreen), var(--green), var(--teal));
     transition: width 0.5s ease;
-    box-shadow: 0 0 10px var(--green);
+    box-shadow: 0 0 8px var(--green);
   }
 
   .loading-pct {
     font-family: 'Orbitron', monospace;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     color: var(--dimgreen);
-    letter-spacing: 2px;
-    margin-bottom: 2rem;
-    position: relative;
-    z-index: 10;
+    letter-spacing: 3px;
+    margin-bottom: 1.5rem;
   }
 
-  .sky-stage  { position:absolute; top:0; left:0; right:0; bottom:140px; z-index:4; overflow:hidden; }
-  .walk-stage { position:absolute; bottom:0; left:0; right:0; height:140px; z-index:5; overflow:hidden; }
-
-  .ground-strip {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 40px;
-    background: linear-gradient(to top, rgba(0,255,65,0.08), transparent);
-    border-top: 1px solid var(--border);
-    z-index: 3;
-  }
-
-  .anim-alien { position:absolute; bottom:30px; will-change:transform; }
-  .anim-ufo   { position:absolute; will-change:transform; }
-
-  @keyframes walkRight { 0% { transform:translateX(-220px); } 100% { transform:translateX(calc(100vw + 220px)); } }
-  @keyframes walkLeft  { 0% { transform:translateX(calc(100vw + 220px)) scaleX(-1); } 100% { transform:translateX(-220px) scaleX(-1); } }
-  @keyframes ufoDrift  {
-    0%   { transform:translateX(calc(100vw + 260px)) translateY(0); }
-    30%  { transform:translateX(70vw) translateY(-25px); }
-    65%  { transform:translateX(40vw) translateY(10px); }
-    100% { transform:translateX(-260px) translateY(-5px); }
-  }
-
-  /* speech bubble retro terminal style */
-  .speech-bubble {
-    position: absolute;
-    background: rgba(0,10,0,0.9);
-    border: 1px solid var(--green);
-    padding: 4px 10px;
+  /* terminal log */
+  .ls-terminal {
+    width: 340px;
+    margin: 0 auto;
+    text-align: left;
     font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
+    color: var(--dimgreen);
     letter-spacing: 1px;
-    color: var(--green);
-    white-space: nowrap;
-    z-index: 20;
-    box-shadow: 0 0 10px rgba(0,255,65,0.3);
-    pointer-events: none;
+    height: 60px;
+    overflow: hidden;
   }
 
-  .speech-bubble::after {
-    content: '';
-    position: absolute;
-    bottom: -6px; left: 10px;
-    border: 4px solid transparent;
-    border-top-color: var(--green);
+  .ls-terminal p {
+    margin: 0;
+    padding: 2px 0;
+    animation: fadeInLine 0.3s ease-out;
+  }
+
+  @keyframes fadeInLine {
+    0%   { opacity:0; transform:translateX(-5px); }
+    100% { opacity:1; transform:translateX(0); }
   }
 
   /* ── RESULT ── */
@@ -831,15 +903,52 @@
 
 <!-- Loading Screen -->
 <div class="loading-screen" id="loadingScreen">
-  <p class="loading-title" id="loadingTitle">TRANSMITTING TO COSMOS</p>
-  <p class="loading-sub" id="loadingSub">painting your alien soul...</p>
-  <div class="loading-bar-wrap">
-    <div class="loading-bar" id="loadingBar"></div>
+  <div class="ls-overlay"></div>
+  <div class="ls-grid"></div>
+  <div class="ls-fog1"></div>
+  <div class="ls-fog2"></div>
+  <div class="ls-egg" id="lsEgg">
+    <svg viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg" width="180">
+      <!-- egg glow -->
+      <ellipse cx="100" cy="240" rx="60" ry="12" fill="rgba(0,255,65,0.15)" filter="url(#blur)"/>
+      <!-- egg body -->
+      <path d="M100 20 C140 20 170 80 170 150 C170 210 140 240 100 240 C60 240 30 210 30 150 C30 80 60 20 100 20Z" 
+            fill="url(#eggGrad)" stroke="rgba(0,255,65,0.4)" stroke-width="1"/>
+      <!-- egg cracks -->
+      <path d="M95 80 L100 110 L88 130 L105 160" stroke="rgba(0,255,65,0.6)" stroke-width="1.5" fill="none"/>
+      <path d="M110 100 L105 125 L115 145" stroke="rgba(0,255,65,0.4)" stroke-width="1" fill="none"/>
+      <!-- egg glow center -->
+      <ellipse cx="100" cy="160" rx="30" ry="40" fill="rgba(0,255,65,0.08)"/>
+      <!-- opening at top -->
+      <path d="M75 80 Q100 60 125 80" stroke="rgba(0,255,65,0.8)" stroke-width="2" fill="rgba(0,20,0,0.8)"/>
+      <!-- tendrils coming out -->
+      <path d="M90 75 Q80 50 70 30" stroke="rgba(0,255,65,0.5)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M100 70 Q100 40 105 15" stroke="rgba(0,255,65,0.4)" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <path d="M110 75 Q120 45 135 25" stroke="rgba(0,255,65,0.5)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <defs>
+        <radialGradient id="eggGrad" cx="40%" cy="35%">
+          <stop offset="0%" stop-color="rgba(0,60,10,0.9)"/>
+          <stop offset="60%" stop-color="rgba(0,30,5,0.95)"/>
+          <stop offset="100%" stop-color="rgba(0,10,0,1)"/>
+        </radialGradient>
+        <filter id="blur"><feGaussianBlur stdDeviation="4"/></filter>
+      </defs>
+    </svg>
   </div>
-  <p class="loading-pct" id="loadingPct">0%</p>
-  <div class="sky-stage"  id="skyStage"></div>
-  <div class="walk-stage" id="walkStage"></div>
-  <div class="ground-strip"></div>
+  <div class="ls-content">
+    <p class="ls-warning">⚠ WARNING ⚠</p>
+    <p class="loading-title" id="loadingTitle">ALIEN SIGNAL DETECTED</p>
+    <p class="loading-sub" id="loadingSub">initializing transformation sequence...</p>
+    <div class="loading-bar-wrap">
+      <div class="loading-bar" id="loadingBar"></div>
+    </div>
+    <p class="loading-pct" id="loadingPct">0%</p>
+    <div class="ls-terminal" id="lsTerminal">
+      <p>&gt; scanning biometric data...</p>
+    </div>
+  </div>
+  <div class="ls-stars" id="lsStars"></div>
+  <div class="ls-scanline"></div>
 </div>
 
 <section id="gallery">
@@ -882,200 +991,69 @@ document.addEventListener('mousemove', e => {
   cursor.style.top  = e.clientY + 'px';
 });
 
-/* ── SVG CHARACTERS ── */
-function svgAlienEating(skinColor, foodEmoji, size) {
-  const w = size, h = size * 1.95;
-  return `<svg width="${w}" height="${h}" viewBox="0 0 90 175" xmlns="http://www.w3.org/2000/svg" style="overflow:visible;filter:drop-shadow(0 0 8px ${skinColor})">
-    <ellipse cx="45" cy="170" rx="22" ry="5" fill="rgba(0,0,0,0.5)"/>
-    <rect x="30" y="120" width="12" height="38" rx="6" fill="${skinColor}" stroke="#000" stroke-width="2"/>
-    <rect x="48" y="120" width="12" height="38" rx="6" fill="${skinColor}" stroke="#000" stroke-width="2"/>
-    <ellipse cx="36" cy="158" rx="12" ry="6" fill="${skinColor}" stroke="#000" stroke-width="2"/>
-    <ellipse cx="54" cy="158" rx="12" ry="6" fill="${skinColor}" stroke="#000" stroke-width="2"/>
-    <circle cx="27" cy="160" r="3.5" fill="${skinColor}" stroke="#000" stroke-width="1.5"/>
-    <circle cx="33" cy="162" r="3.5" fill="${skinColor}" stroke="#000" stroke-width="1.5"/>
-    <circle cx="39" cy="162" r="3.5" fill="${skinColor}" stroke="#000" stroke-width="1.5"/>
-    <circle cx="45" cy="160" r="3.5" fill="${skinColor}" stroke="#000" stroke-width="1.5"/>
-    <circle cx="51" cy="162" r="3.5" fill="${skinColor}" stroke="#000" stroke-width="1.5"/>
-    <circle cx="57" cy="162" r="3.5" fill="${skinColor}" stroke="#000" stroke-width="1.5"/>
-    <rect x="25" y="84" width="40" height="42" rx="13" fill="${skinColor}" stroke="#000" stroke-width="2.5"/>
-    <path d="M25 94 Q8 82 6 66" stroke="${skinColor}" stroke-width="11" fill="none" stroke-linecap="round"/>
-    <path d="M25 94 Q8 82 6 66" stroke="#000" stroke-width="14" fill="none" stroke-linecap="round" paint-order="stroke"/>
-    <path d="M25 94 Q8 82 6 66" stroke="${skinColor}" stroke-width="11" fill="none" stroke-linecap="round"/>
-    <circle cx="3"  cy="61" r="5.5" fill="${skinColor}" stroke="#000" stroke-width="2"/>
-    <circle cx="10" cy="56" r="5.5" fill="${skinColor}" stroke="#000" stroke-width="2"/>
-    <circle cx="18" cy="55" r="5.5" fill="${skinColor}" stroke="#000" stroke-width="2"/>
-    <path d="M65 94 Q82 86 84 73" stroke="${skinColor}" stroke-width="11" fill="none" stroke-linecap="round"/>
-    <path d="M65 94 Q82 86 84 73" stroke="#000" stroke-width="14" fill="none" stroke-linecap="round" paint-order="stroke"/>
-    <path d="M65 94 Q82 86 84 73" stroke="${skinColor}" stroke-width="11" fill="none" stroke-linecap="round"/>
-    <text x="80" y="68" font-size="24" text-anchor="middle">${foodEmoji}</text>
-    <rect x="38" y="74" width="14" height="14" rx="5" fill="${skinColor}" stroke="#000" stroke-width="2"/>
-    <circle cx="45" cy="44" r="36" fill="${skinColor}" stroke="#000" stroke-width="3"/>
-    <ellipse cx="32" cy="26" rx="11" ry="7" fill="rgba(255,255,255,0.2)" transform="rotate(-20,32,26)"/>
-    <line x1="46" y1="10" x2="54" y2="-10" stroke="#000" stroke-width="3.5" stroke-linecap="round"/>
-    <circle cx="55" cy="-14" r="7" fill="${skinColor}" stroke="#000" stroke-width="2.5"/>
-    <circle cx="55" cy="-14" r="3.5" fill="rgba(255,255,255,0.7)"/>
-    <circle cx="30" cy="46" r="14" fill="#000"/>
-    <circle cx="60" cy="46" r="14" fill="#000"/>
-    <circle cx="25" cy="40" r="4.5" fill="white"/>
-    <circle cx="55" cy="40" r="4.5" fill="white"/>
-    <circle cx="34" cy="49" r="2" fill="white" opacity="0.7"/>
-    <circle cx="64" cy="49" r="2" fill="white" opacity="0.7"/>
-    <circle cx="42" cy="59" r="2.5" fill="rgba(0,0,0,0.3)"/>
-    <circle cx="48" cy="59" r="2.5" fill="rgba(0,0,0,0.3)"/>
-    <path d="M33 67 Q45 78 57 67" stroke="#000" stroke-width="2.5" fill="rgba(180,40,40,0.5)" stroke-linecap="round"/>
-    <circle cx="9"  cy="44" r="7" fill="${skinColor}" stroke="#000" stroke-width="2"/>
-    <circle cx="81" cy="44" r="7" fill="${skinColor}" stroke="#000" stroke-width="2"/>
-  </svg>`;
+/* ── LOADING SCENE ── */
+function buildStars() {
+  const container = document.getElementById('lsStars');
+  container.innerHTML = '';
+  for (let i = 0; i < 120; i++) {
+    const star = document.createElement('div');
+    const size = Math.random() * 2.5 + 0.5;
+    star.style.cssText = `
+      position:absolute;
+      width:${size}px; height:${size}px;
+      background:#fff;
+      border-radius:50%;
+      left:${Math.random()*100}%;
+      top:${Math.random()*60}%;
+      opacity:${0.1 + Math.random()*0.5};
+      animation: twinkle ${2+Math.random()*4}s infinite ${Math.random()*4}s;
+    `;
+    container.appendChild(star);
+  }
 }
 
-function svgUFO(bodyColor, lightColor) {
-  return `<svg width="200" height="100" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" style="overflow:visible;filter:drop-shadow(0 0 12px ${lightColor})">
-    <ellipse cx="100" cy="98" rx="88" ry="7" fill="rgba(0,0,0,0.3)"/>
-    <ellipse cx="100" cy="68" rx="90" ry="22" fill="${bodyColor}" stroke="#000" stroke-width="2.5"/>
-    <circle cx="28"  cy="71" r="7" fill="${lightColor}" stroke="#000" stroke-width="2"/>
-    <circle cx="55"  cy="77" r="7" fill="${lightColor}" stroke="#000" stroke-width="2" opacity="0.85"/>
-    <circle cx="82"  cy="80" r="7" fill="${lightColor}" stroke="#000" stroke-width="2"/>
-    <circle cx="118" cy="80" r="7" fill="${lightColor}" stroke="#000" stroke-width="2" opacity="0.85"/>
-    <circle cx="145" cy="77" r="7" fill="${lightColor}" stroke="#000" stroke-width="2"/>
-    <circle cx="172" cy="71" r="7" fill="${lightColor}" stroke="#000" stroke-width="2" opacity="0.85"/>
-    <ellipse cx="100" cy="52" rx="54" ry="38" fill="${bodyColor}" stroke="#000" stroke-width="2.5"/>
-    <ellipse cx="100" cy="46" rx="38" ry="26" fill="rgba(120,220,255,0.2)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
-    <ellipse cx="86"  cy="34" rx="14" ry="9" fill="rgba(255,255,255,0.25)" transform="rotate(-22,86,34)"/>
-    <circle cx="94"  cy="46" r="6" fill="rgba(0,0,0,0.75)"/>
-    <circle cx="112" cy="46" r="6" fill="rgba(0,0,0,0.75)"/>
-    <circle cx="92"  cy="43" r="2.5" fill="white"/>
-    <circle cx="110" cy="43" r="2.5" fill="white"/>
-    <polygon points="74,86 126,86 148,100 52,100" fill="rgba(255,255,120,0.08)" stroke="rgba(255,255,100,0.3)" stroke-width="1"/>
-    <line x1="100" y1="86" x2="100" y2="100" stroke="rgba(255,255,100,0.4)" stroke-width="2" stroke-dasharray="5,4"/>
-    <text x="100" y="100" font-size="14" text-anchor="middle">🐄</text>
-  </svg>`;
-}
-
-const alienColors = ['#00FF41','#C084FC','#34D399','#F472B6','#FCD34D','#67E8F9','#A3E635','#FB923C'];
-const foods       = ['🍕','🍔','🍟','🌮','🍩','🌭','🍦','🍿'];
-const ufoTypes    = [
-  {body:'#0D3D0D',light:'#00FF41'},
-  {body:'#1a0a3d',light:'#9B00FF'},
-  {body:'#1D4ED8',light:'#00FFCC'},
-  {body:'#3D0D1A',light:'#FF00CC'},
-  {body:'#1a1a00',light:'#FFD700'},
+const terminalLines = [
+  '> scanning biometric data...',
+  '> extracting facial geometry...',
+  '> connecting to alien network...',
+  '> initializing paint protocol...',
+  '> calibrating cosmic palette...',
+  '> uploading to Starlit's mind...',
+  '> alien DNA synthesis in progress...',
+  '> applying acrylic matrix...',
+  '> rendering alien soul...',
+  '> transmission almost complete...',
 ];
 
-let loadingTimers = [];
-let spawnInterval = null;
+let termIdx = 0;
+let termInterval = null;
 
-function clearLoadingScene() {
-  document.getElementById('walkStage').innerHTML = '';
-  document.getElementById('skyStage').innerHTML  = '';
-  loadingTimers.forEach(t => clearTimeout(t));
-  loadingTimers = [];
-  if (spawnInterval) { clearInterval(spawnInterval); spawnInterval = null; }
+function startTerminal() {
+  const term = document.getElementById('lsTerminal');
+  term.innerHTML = '';
+  termIdx = 0;
+  termInterval = setInterval(() => {
+    if (termIdx < terminalLines.length) {
+      const p = document.createElement('p');
+      p.textContent = terminalLines[termIdx];
+      term.appendChild(p);
+      term.scrollTop = term.scrollHeight;
+      termIdx++;
+    }
+  }, 1800);
 }
 
-function spawnAlien() {
-  const walk  = document.getElementById('walkStage');
-  const color = alienColors[Math.floor(Math.random() * alienColors.length)];
-  const food  = foods[Math.floor(Math.random() * foods.length)];
-  const size  = 50 + Math.random() * 36;
-  const dur   = 7 + Math.random() * 9;
-  const dir   = Math.random() > 0.5 ? 'right' : 'left';
-  const bot   = Math.random() * 16;
-
-  const el = document.createElement('div');
-  el.className = 'anim-alien';
-  el.style.bottom = bot + 'px';
-  el.innerHTML = svgAlienEating(color, food, size);
-  el.style.animation = `${dir === 'right' ? 'walkRight' : 'walkLeft'} ${dur}s linear forwards`;
-
-  const msgs = ['> NOM_NOM.exe','> EARTHLING_FOOD++','> DELICIOUS=TRUE','> MORE_PIZZA.sys','> YUM_PROTOCOL','> CONSUMING...'];
-  const bubble = document.createElement('div');
-  bubble.className = 'speech-bubble';
-  bubble.textContent = msgs[Math.floor(Math.random() * msgs.length)];
-  bubble.style.cssText = `
-    bottom:${size * 1.75 + bot + 10}px;
-    ${dir === 'right' ? 'left:10px' : 'right:10px'};
-    position:absolute;
-    animation:${el.style.animation};
-  `;
-
-  walk.appendChild(el);
-  walk.appendChild(bubble);
-  const t = setTimeout(() => { el.remove(); bubble.remove(); }, dur * 1000 + 500);
-  loadingTimers.push(t);
-}
-
-function spawnUFO() {
-  const sky = document.getElementById('skyStage');
-  const t   = ufoTypes[Math.floor(Math.random() * ufoTypes.length)];
-  const dur = 13 + Math.random() * 9;
-  const top = 8 + Math.random() * 55;
-
-  const el = document.createElement('div');
-  el.className = 'anim-ufo';
-  el.style.top = top + '%';
-  el.innerHTML = svgUFO(t.body, t.light);
-  el.style.animation = `ufoDrift ${dur}s ease-in-out forwards`;
-  sky.appendChild(el);
-
-  const rm = setTimeout(() => el.remove(), dur * 1000 + 500);
-  loadingTimers.push(rm);
-}
-
-/* loading bar */
-let barInterval = null;
-let barPct = 0;
-
-function startLoadingBar() {
-  barPct = 0;
-  document.getElementById('loadingBar').style.width = '0%';
-  document.getElementById('loadingPct').textContent = '0%';
-  barInterval = setInterval(() => {
-    const step = barPct < 40 ? 2.5 : barPct < 70 ? 1.2 : barPct < 88 ? 0.4 : 0.1;
-    barPct = Math.min(barPct + step, 92);
-    document.getElementById('loadingBar').style.width = barPct + '%';
-    document.getElementById('loadingPct').textContent = Math.floor(barPct) + '%';
-  }, 500);
-}
-
-function finishLoadingBar() {
-  if (barInterval) clearInterval(barInterval);
-  document.getElementById('loadingBar').style.width = '100%';
-  document.getElementById('loadingPct').textContent = '100%';
-}
-
-/* rotating loading messages */
-const loadMsgs = [
-  ['TRANSMITTING TO COSMOS','scanning your earthling face...'],
-  ['PAINTING YOUR SOUL','mixing cosmic pigments...'],
-  ['ABDUCTING YOUR LIKENESS','probe initialized...'],
-  ['CONSULTING THE ELDERS','establishing alien contact...'],
-  ['ACTIVATING RAY GUN','target locked on your face...'],
-  ['GENERATING ALIEN DNA','recoding your genome...'],
-];
-let msgInterval = null;
-let msgIdx = 0;
-
-function startLoadingMessages() {
-  msgIdx = 0;
-  msgInterval = setInterval(() => {
-    msgIdx = (msgIdx + 1) % loadMsgs.length;
-    document.getElementById('loadingTitle').textContent = loadMsgs[msgIdx][0];
-    document.getElementById('loadingSub').textContent   = loadMsgs[msgIdx][1];
-  }, 2500);
-}
-
-function stopLoadingMessages() {
-  if (msgInterval) clearInterval(msgInterval);
+function stopTerminal() {
+  if (termInterval) clearInterval(termInterval);
 }
 
 function startLoadingScene() {
-  clearLoadingScene();
-  spawnAlien(); spawnAlien(); spawnAlien();
-  spawnUFO(); spawnUFO();
-  spawnInterval = setInterval(() => {
-    spawnAlien();
-    if (Math.random() > 0.45) spawnUFO();
-  }, 2600);
+  buildStars();
+  startTerminal();
+}
+
+function clearLoadingScene() {
+  stopTerminal();
 }
 
 /* file upload */
