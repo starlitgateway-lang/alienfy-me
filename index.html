@@ -986,8 +986,15 @@ uploadZone.addEventListener('drop', e => {
   uploadZone.classList.remove('dragover');
   if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
 });
-uploadZone.addEventListener('click', () => fileInput.click());
-fileInput.addEventListener('change', e => { if (e.target.files[0]) handleFile(e.target.files[0]); });
+uploadZone.addEventListener('click', (e) => { 
+  if (e.target !== fileInput) fileInput.click(); 
+});
+
+fileInput.addEventListener('change', function() { 
+  if (this.files && this.files[0]) {
+    handleFile(this.files[0]);
+  }
+});
 
 function handleFile(file) {
   const reader = new FileReader();
