@@ -7,12 +7,12 @@ export default async function handler(req, res) {
 
   const { image_url, source } = req.body;
 
-  const response = await fetch(`${process.env.SUPABASE_URL}/rest/v1/gallery`, {
+  const response = await fetch(`${process.env.supabase_url}/rest/v1/gallery`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'apikey': process.env.SUPABASE_KEY,
-      'Authorization': `Bearer ${process.env.SUPABASE_KEY}`,
+      'apikey': process.env.supabase_key,
+      'Authorization': `Bearer ${process.env.supabase_key}`,
       'Prefer': 'return=representation'
     },
     body: JSON.stringify({ image_url, source })
