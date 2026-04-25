@@ -991,6 +991,54 @@ document.addEventListener('mousemove', e => {
   cursor.style.top  = e.clientY + 'px';
 });
 
+/* ── LOADING BAR ── */
+let barInterval = null;
+let barPct = 0;
+
+function startLoadingBar() {
+  barPct = 0;
+  document.getElementById('loadingBar').style.width = '0%';
+  document.getElementById('loadingPct').textContent = '0%';
+  barInterval = setInterval(() => {
+    const step = barPct < 40 ? 2.5 : barPct < 70 ? 1.2 : barPct < 88 ? 0.4 : 0.1;
+    barPct = Math.min(barPct + step, 92);
+    document.getElementById('loadingBar').style.width = barPct + '%';
+    document.getElementById('loadingPct').textContent = Math.floor(barPct) + '%';
+  }, 500);
+}
+
+function finishLoadingBar() {
+  if (barInterval) clearInterval(barInterval);
+  document.getElementById('loadingBar').style.width = '100%';
+  document.getElementById('loadingPct').textContent = '100%';
+}
+
+/* rotating loading messages */
+const loadMsgs = [
+  ['ALIEN SIGNAL DETECTED',       'initializing transformation sequence...'],
+  ['PAINTING YOUR SOUL',          'mixing cosmic pigments...'],
+  ['ABDUCTING YOUR LIKENESS',     'probe initialized...'],
+  ['CONSULTING THE ELDERS',       'establishing alien contact...'],
+  ['ACTIVATING RAY GUN',          'target locked on your face...'],
+  ['GENERATING ALIEN DNA',        'recoding your genome...'],
+];
+let msgInterval = null;
+
+function startLoadingMessages() {
+  let idx = 0;
+  msgInterval = setInterval(() => {
+    idx = (idx + 1) % loadMsgs.length;
+    const el  = document.getElementById('loadingTitle');
+    const sub = document.getElementById('loadingSub');
+    if (el)  el.textContent  = loadMsgs[idx][0];
+    if (sub) sub.textContent = loadMsgs[idx][1];
+  }, 2500);
+}
+
+function stopLoadingMessages() {
+  if (msgInterval) clearInterval(msgInterval);
+}
+
 /* ── LOADING SCENE ── */
 function buildStars() {
   const container = document.getElementById('lsStars');
@@ -1018,7 +1066,7 @@ const terminalLines = [
   '> connecting to alien network...',
   '> initializing paint protocol...',
   '> calibrating cosmic palette...',
-  '> uploading to Starlits mind...',
+  '> uploading to Starlit mind...',
   '> alien DNA synthesis in progress...',
   '> applying acrylic matrix...',
   '> rendering alien soul...',
