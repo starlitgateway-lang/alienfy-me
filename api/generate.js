@@ -5,12 +5,17 @@ export default async function handler(req, res) {
 
   if (req.method === 'OPTIONS') return res.status(200).end();
 
+  const token = process.env.REPLICATE_API_TOKEN;
+  if (!token) {
+    return res.status(200).json({ id: 'NO_TOKEN', error: 'token missing' });
+  }
+
   const { prompt, image } = req.body;
 
   const response = await fetch('https://api.replicate.com/v1/predictions', {
     method: 'POST',
     headers: {
-      'Authorization': `Token ${process.env.REPLICATE_API_TOKEN}`,
+      'Authorization': `Token ${token}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
