@@ -880,7 +880,7 @@
     <span class="upload-icon">👽</span>
     <p class="upload-text">Drop your photo here</p>
     <p class="upload-sub">or click to browse &mdash; jpg / png / webp</p>
-    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">[ Choose File ]</button>
+    <button class="upload-btn" onclick="event.stopPropagation(); document.getElementById('fileInput').click()">[ Choose File ]</button>
     <input type="file" id="fileInput" accept="image/*">
   </div>
 
@@ -967,7 +967,7 @@
   <div class="info-card">
     <h3>WANT A REAL STARLIT ORIGINAL?</h3>
     <p>Starlit is available for custom alien portrait commissions — hand painted in acrylic on canvas. Send your photo and receive a one of a kind piece of alien art. Each painting is unique, signed, and ready to hang in your universe.</p>
-    <a href="mailto:starlit@alienfy.me" class="cta-btn btn-commission">▶ Request a Commission</a>
+    <a href="mailto:starlitgateway@gmail.com" class="cta-btn btn-commission">▶ Request a Commission</a>
   </div>
 </section>
 
@@ -977,7 +977,7 @@
   <div class="divider"></div>
   <div class="info-card">
     <p>This experience is free because art should be for everyone. If your alien made you smile, consider supporting Starlit to keep creating weird and wonderful things across the universe.</p>
-    <a href="https://www.paypal.com/donate" target="_blank" class="cta-btn btn-donate">▶ Send a Little Love</a>
+    <a href="https://venmo.com/Mitchell-Cortes-1" target="_blank" class="cta-btn btn-donate">▶ Venmo @Mitchell-Cortes-1</a>
   </div>
 </section>
 
@@ -1117,9 +1117,6 @@ uploadZone.addEventListener('drop', e => {
   uploadZone.classList.remove('dragover');
   if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
 });
-uploadZone.addEventListener('click', (e) => {
-  if (e.target !== fileInput) fileInput.click();
-});
 fileInput.addEventListener('change', function() {
   if (this.files && this.files[0]) handleFile(this.files[0]);
 });
@@ -1222,10 +1219,19 @@ function renderGallery() {
 
 function addToGallery() {
   const src = document.getElementById('resultImg').src;
-  if (!src) return;
-  gallery.push({ url:src, date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) });
+  if (!src || src === window.location.href) return;
+  const entry = { 
+    url: src, 
+    date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) 
+  };
+  gallery.push(entry);
   if (gallery.length > 50) gallery.shift();
-  localStorage.setItem('alienGallery', JSON.stringify(gallery));
+  try {
+    localStorage.setItem('alienGallery', JSON.stringify(gallery));
+    console.log('Gallery saved:', gallery.length, 'items');
+  } catch(e) {
+    console.error('Gallery save failed:', e);
+  }
   renderGallery();
   document.getElementById('gallery').scrollIntoView({ behavior:'smooth' });
 }
@@ -1242,3 +1248,4 @@ renderGallery();
 </script>
 </body>
 </html>
+
