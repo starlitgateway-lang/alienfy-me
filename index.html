@@ -744,21 +744,7 @@ const BASE = 'https://raw.githubusercontent.com/starlitgateway-lang/alienfy-me/m
 /* scatter burst words */
 const burstWords = ['POW!','ZAP!','WOW!','BAM!','YES!','WILD!','ALIEN!','NO WAY!','COSMIC!','WOAH!'];
 const burstColors = ['#FF1F1F','#FFE000','#0055FF','#FF00CC','#9B00FF','#FF6B00'];
-burstWords.forEach((word, i) => {
-  const el = document.createElement('div');
-  el.className = 'burst';
-  el.textContent = word;
-  const color = burstColors[i % burstColors.length];
-  el.style.cssText = `
-    color:${color};
-    font-size:${1.2 + Math.random() * 1.5}rem;
-    top:${Math.random() * 90}%;
-    left:${Math.random() * 90}%;
-    transform:rotate(${-15 + Math.random() * 30}deg);
-    opacity:0.35;
-  `;
-  bg.appendChild(el);
-});
+
 
 /* ── SVG CHARACTERS ── */
 function svgAlienEating(skinColor, foodEmoji, size) {
