@@ -6,11 +6,11 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const response = await fetch(
-    `${process.env.SUPABASE_URL}/rest/v1/gallery?select=*&order=created_at.desc&limit=50`,
+    `${process.env.supabase_url}/rest/v1/gallery?select=*&order=created_at.desc&limit=50`,
     {
       headers: {
-        'apikey': process.env.SUPABASE_KEY,
-        'Authorization': `Bearer ${process.env.SUPABASE_KEY}`,
+        'apikey': process.env.supabase_key,
+        'Authorization': `Bearer ${process.env.supabase_key}`,
       }
     }
   );
