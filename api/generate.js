@@ -29,11 +29,11 @@ export default async function handler(req, res) {
         negative_prompt: negative_prompt,
         image: image,
         num_outputs: 1,
-        num_inference_steps: 28,
-        guidance_scale: 7.5,
+        num_inference_steps: 40,
+        guidance_scale: 5,
         output_format: 'png',
         output_quality: 90,
-        image_to_image_strength: 0.85,
+        image_to_image_strength: 0.60,
       }
     })
   });
