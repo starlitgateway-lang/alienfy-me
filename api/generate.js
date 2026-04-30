@@ -14,7 +14,7 @@ export default async function handler(req, res) {
 
   const prompt = "STARLIT acrylic painting on canvas, alien character portrait artwork, fully painted illustration, large smooth dome head, huge wraparound black almond eyes with white highlight dots, small blue diamond gem on forehead, colorful cosmic jumpsuit outfit, vibrant saturated acrylic paint colors, glowing painted cosmic space background with stars, full body alien character standing, whimsical expressive painted art, bold visible brushstrokes, fine art acrylic painting style, NOT a photograph, NOT realistic, NOT a real human, NO human face features, painterly artistic style only";
 
-  const negative_prompt = "photorealistic, real person, photograph, human face, realistic skin texture, camera photo, hyper realistic, 3d render, realistic eyes, real hair, skin pores, beauty photo, portrait photo, fashion photo, instagram photo, realistic lighting";
+ const negative_prompt = "photorealistic, real person, photograph, human face, realistic skin texture, camera photo, hyper realistic, 3d render, realistic eyes, real hair, skin pores, beauty photo, portrait photo, fashion photo, instagram photo, realistic lighting, hand holding painting, canvas edge, wall background, floor, real room, photograph of painting, picture frame";
 
   const response = await fetch('https://api.replicate.com/v1/predictions', {
     method: 'POST',
