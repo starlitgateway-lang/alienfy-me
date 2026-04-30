@@ -12,6 +12,8 @@ export default async function handler(req, res) {
 
   const { prompt, image } = req.body;
 
+  const prompt = "STARLIT style acrylic painting, alien portrait artwork, large dome head, huge black almond eyes with white highlight dots, diamond gem on forehead, colorful cosmic jumpsuit, painted acrylic art style, glowing cosmic painted background, full body alien character, whimsical expressive painted character, NOT photorealistic, NOT a real person, painterly brushstrokes, fine art painting";
+
   const response = await fetch('https://api.replicate.com/v1/predictions', {
     method: 'POST',
     headers: {
