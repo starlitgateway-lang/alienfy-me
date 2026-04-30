@@ -1156,8 +1156,7 @@ async function startTransform() {
   startLoadingMessages();
 
   try {
-   const prompt = "STARLIT acrylic painting style, alien portrait, large dome head, huge black almond eyes with white highlight dots, diamond gem on forehead, colorful cosmic jumpsuit, vibrant acrylic painted art, glowing cosmic painted background, full body alien character, whimsical expressive painted character, painterly brushstrokes, fine art acrylic painting";
-
+   const prompt = "STARLIT acrylic painting on canvas, alien character portrait artwork, fully painted illustration, large smooth dome head, huge wraparound black almond eyes with white highlight dots, small blue diamond gem on forehead, colorful cosmic jumpsuit outfit, vibrant saturated acrylic paint colors, glowing painted cosmic space background with stars, full body alien character standing, whimsical expressive painted art, bold visible brushstrokes, fine art acrylic painting style, NOT a photograph, NOT realistic, NOT a real human, NO human face features, painterly artistic style only";
     const startRes = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
