@@ -28,10 +28,10 @@ export default async function handler(req, res) {
         image: image,
         num_outputs: 1,
         num_inference_steps: 28,
-        guidance_scale: 4.5,
+        guidance_scale: 7.5,
         output_format: 'png',
         output_quality: 90,
-        image_to_image_strength: 0.6,
+        image_to_image_strength: 0.85,
       }
     })
   });
