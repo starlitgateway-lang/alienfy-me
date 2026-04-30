@@ -12,7 +12,9 @@ export default async function handler(req, res) {
 
   const { image } = req.body;
 
-  const prompt = "STARLIT style acrylic painting, alien portrait artwork, large dome head, huge black almond eyes with white highlight dots, diamond gem on forehead, colorful cosmic jumpsuit, painted acrylic art style, glowing cosmic painted background, full body alien character, whimsical expressive painted character, NOT photorealistic, NOT a real person, painterly brushstrokes, fine art painting";
+  const prompt = "STARLIT acrylic painting on canvas, alien character portrait artwork, fully painted illustration, large smooth dome head, huge wraparound black almond eyes with white highlight dots, small blue diamond gem on forehead, colorful cosmic jumpsuit outfit, vibrant saturated acrylic paint colors, glowing painted cosmic space background with stars, full body alien character standing, whimsical expressive painted art, bold visible brushstrokes, fine art acrylic painting style, NOT a photograph, NOT realistic, NOT a real human, NO human face features, painterly artistic style only";
+
+  const negative_prompt = "photorealistic, real person, photograph, human face, realistic skin texture, camera photo, hyper realistic, 3d render, realistic eyes, real hair, skin pores, beauty photo, portrait photo, fashion photo, instagram photo, realistic lighting";
 
   const response = await fetch('https://api.replicate.com/v1/predictions', {
     method: 'POST',
@@ -24,7 +26,7 @@ export default async function handler(req, res) {
       version: '83757c9d89034c2543a5bcfff8e82983dcb2ebd17cc6799f9ababc1aedd3a598',
       input: {
         prompt: prompt,
-        negative_prompt: "photorealistic, real person, photograph, human face, realistic skin, camera photo, hyper realistic, 3d render",
+        negative_prompt: negative_prompt,
         image: image,
         num_outputs: 1,
         num_inference_steps: 28,
